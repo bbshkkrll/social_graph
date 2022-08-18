@@ -1,41 +1,33 @@
 import json
-import os
-import requests
+from person import Person
 
+persons = None
 
-def get_url(method: str, fields: dict):
-    version = '5.131'
-    url = f'https://api.vk.com/method/{method}?'
-    for name, value in fields.items():
-        url += f'{name}={value}&'
+with open('base_info.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+    persons = {person['id']: Person(person) for person in data}
 
-    url += f'access_token={os.environ["VK_API_TOKEN"]}&v={version}'
-    return url
+with open('mutual_friends.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+    common_friends_ids = {person['id']: person['common_friends'] for person in data}
 
+    for id, person in persons.items():
+        common_friends = []
+        for common_friend_id in common_friends_ids[id]:
+            common_friends.append(persons[common_friend_id])
 
-if __name__ == '__main__':
-    main_id = '324441199'
+        person.set_friends(common_friends)
 
-    response = requests.get(get_url('friends.get', {'fields': 'uid,first_name,last_name'})).json()['response']
-
-    friends_ids = [friend['id'] for friend in response['items']]
-
-    with open('friends.json', 'w', encoding='utf-8') as f:
-        json.dump(response, f,
-                  ensure_ascii=False)
-
-    mutual_friends = requests.get(get_url('execute.get_mutual_friends', {
-        'targets': ','.join(map(str, friends_ids)),
-        'main_id': main_id
-    })).json()['response']
-
-    with open('mutual_friends.json', 'w', encoding='utf-8') as f:
-        json.dump(mutual_friends, f,
-                  ensure_ascii=False)
-
-    base_info = requests.get(
-        get_url('users.get', {'fields': 'uid,first_name,last_name,city,photo,bday,country,sex',
-                              'user_ids': ','.join(map(str, friends_ids))})).json()[
-        'response']
-    with open('base_info.json', 'w', encoding='utf-8') as f:
-        json.dump(base_info, f, ensure_ascii=False)
+with open('graph_data.json', 'w', encoding='utf-8') as f:
+    links = []
+    nodes = []
+    for person in persons.values():
+        json_person = person.to_json()
+        links.extend(json_person['links'])
+        nodes.append(json_person['nodes'])
+    json.dump(
+        {
+            'nodes': nodes,
+            'links': links
+        },
+        f, ensure_ascii=False)
