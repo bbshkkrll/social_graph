@@ -1,5 +1,6 @@
 class Person:
     DEFAULT_VALUE = 1
+    MUTUAL_FRIENDS = set()
 
     def __init__(self, data: dict):
         self.uid: int = data['id']
@@ -22,12 +23,13 @@ class Person:
         links = []
         if self.common_friends is not None:
             for friend in self.common_friends:
-                links.append({
-                    'source': f'{self.first_name} {self.last_name}',
-                    'target': f'{friend.first_name} {friend.last_name}',
-                    'value': self.DEFAULT_VALUE
-                })
-
+                if (friend.uid, self.uid) not in Person.MUTUAL_FRIENDS:
+                    links.append({
+                        'source': f'{self.first_name} {self.last_name}',
+                        'target': f'{friend.first_name} {friend.last_name}',
+                        'value': self.DEFAULT_VALUE
+                    })
+                    Person.MUTUAL_FRIENDS.add((self.uid, friend.uid))
         node = {
             'id': f'{self.first_name} {self.last_name}',
             'group': self.sex
