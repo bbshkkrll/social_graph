@@ -1,51 +1,48 @@
 import json
-
-import requests
-
 from person import Person
-from vk_request import main_id, get_url
 
-persons = None
 
-with open('base_info.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-    persons = {person['id']: Person(person) for person in data}
-    persons[main_id] = Person(
-        requests.get(get_url('users.get', {'fields': 'uid,first_name,last_name,photo,sex',
-                                           'user_id': main_id})).json()['response'][0])
-    # Добавление главного id
-    persons[main_id].sex = 45
+class UserData:
+    def __init__(self, main_id, friends: dict, common_friends: dict, friends_base_info: dict, main_id_info):
+        self.main_id = main_id
+        self.friends = friends
+        self.common_friends = common_friends
+        self.friends_base_info = friends_base_info
+        self.main_person = Person(main_id_info, common_friends=[friend['id'] for friend in self.friends])
 
-with open('mutual_friends.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-    common_friends_ids = {person['id']: person['common_friends'] for person in data}
+        self.persons = None
 
-    with open('friends.json', 'r', encoding='utf-8') as f:
-        friends = [person['id'] for person in json.load(f)['items']]
-        common_friends_ids[main_id] = friends
-    for id, person in persons.items():
-        common_friends = []
-        for common_friend_id in common_friends_ids[id]:
-            common_friends.append(persons[common_friend_id])
+    def initialize_friends(self):
+        self.persons = {person['id']: Person(person) for person in self.friends_base_info}
+        self.persons[self.main_person.uid] = self.main_person
 
-        person.set_friends(common_friends)
+        common_friends_ids = {person['id']: person['common_friends'] for person in self.common_friends}
+        common_friends_ids[self.main_person.uid] = self.main_person.common_friends
 
-with open('graph_data.json', 'w', encoding='utf-8') as f:
-    links = []
-    nodes = []
-    for person in persons.values():
-        json_person = person.to_json()
-        links.extend(json_person['links'])
-        nodes.append(json_person['nodes'])
-    json.dump(
-        {
-            'nodes': nodes,
-            'links': links
-        },
-        f, ensure_ascii=False)
+        for id, person in self.persons.items():
+            common_friends = []
+            for common_friend_id in common_friends_ids[id]:
+                common_friends.append(self.persons[common_friend_id])
+
+            person.set_friends(common_friends)
+
+    def dump_data_to_json(self, filename):
+        with open(filename, 'w', encoding='utf-8') as f:
+            links = []
+            nodes = []
+            for person in self.persons.values():
+                json_person = person.to_json()
+                links.extend(json_person['links'])
+                nodes.append(json_person['nodes'])
+            json.dump(
+                {
+                    'nodes': nodes,
+                    'links': links
+                },
+                f, ensure_ascii=False)
 
 # TODO:
 # 1. Add main_id to graph. DONE
-# 2. Reformat the project structure
+# 2. Reformat the project structure. DONE
 # 3. Remove the second connection between nodes. DONE
 # 4. Create authentication with any vk user.

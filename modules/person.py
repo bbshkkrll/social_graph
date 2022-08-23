@@ -2,13 +2,14 @@ class Person:
     DEFAULT_VALUE = 1
     MUTUAL_FRIENDS = set()
 
-    def __init__(self, data: dict):
-        self.uid: int = data['id']
+    def __init__(self, data: dict, common_friends=None):
+        self.uid: int = int(data['id'])
         self.first_name: str = data['first_name']
         self.last_name: str = data['last_name']
-        self.sex: int = data['sex']
+        self.sex: int = int(data['sex'])
         self.photo: str = data['photo']
-        self.common_friends: [Person] = None
+        self.common_friends: [Person] = common_friends
+        self.color = self.sex
 
     def __str__(self):
         return f'Person: first_name={self.first_name} last_name={self.last_name}'
