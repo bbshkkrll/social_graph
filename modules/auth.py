@@ -1,11 +1,7 @@
-import requests
+print(
+    """https://oauth.vk.com/authorize?client_id=51395060&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=offline,friends&response_type=token&v=5.131""")
+'vk1.a.vC0oE028Yb611NTWQFQc0Fk02Dx5AUKGJeFVxr-ZkOicsEI-AfZqSjI2IdO2uCiaHs28LXsSpYuM1QZTpVDeI56OkfpD-jtJOdxkd4_bAYaFA-ZY6foL1lvbcXziraAXTSMcB_W5Vw7XXi4awC7ACjn2RWpcSVPjZZjuDDwznr6lS39bNZCkxRplXWMSpjkz'
 
-from modules.vk_request import get_url
-
-app_id = 51395060
-redirect_uri = 'https://oauth.vk.com/blank.html'
-
-code_flow_url = f'https://oauth.vk.com/authorize?client_id={app_id}&display=page&redirect_uri=http://127.0.0.1&scope=friends&response_type=code&v=5.131'
-print(code_flow_url)
-
-print(requests.get(get_url('users.get', {'fields': 'uid'})).json()['response'][0])
+a = [{'1': '1'}, {'2': '2'}]
+b = [{'1': '1'}]
+print(list(set(a) - set(b)))

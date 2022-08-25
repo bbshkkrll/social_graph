@@ -1,9 +1,10 @@
+import json
 import os
 import requests
 from time import sleep
 
-from modules.main import UserData
-from modules.partition import get_partition
+from modules.user_data import UserData
+from modules.partition import get_partition as parts
 
 
 class VkException(Exception):
@@ -32,14 +33,15 @@ class VkSession(Exception):
 
     def get_user_base_info(self, id):
         response = requests.get(self.get_request_url(VkSession.USERS_GET,
-                                {'user_ids': id, 'fields': 'uid,first_name,last_name,photo,sex'})).json()
+                                                     {'user_ids': id,
+                                                      'fields': 'uid,first_name,last_name,photo,sex'})).json()
 
         if 'error' in response.keys():
             raise VkException(response['error']['error_msg'], response['error']['error_code'])
 
         return response['response'][0]
 
-    def prepare_data(self, main_id):
+    def prepare_data(self, main_id, delay=0.98):
 
         friends = requests.get(self.get_request_url(self.FRIENDS_GET, {'fields': 'uid,first_name,last_name',
                                                                        'user_id': main_id})).json()
@@ -47,15 +49,17 @@ class VkSession(Exception):
         if 'error' in friends.keys():
             raise VkSession(friends['error']['error_msg'], friends['error']['error_code'])
 
-        friends = list(filter((lambda x: 'deactivated' not in x.keys()), friends['response']['items']))
-        friends_id = [friend['id'] for friend in friends]
+        active_friends = list(filter((lambda x: 'deactivated' not in x.keys()),
+                              friends['response']['items']))
+        banned_friends = list(filter((lambda x: 'deactivated' in x.keys()), friends['response']['items']))
+        friends_id = [friend['id'] for friend in active_friends]
 
         common_friends = []
         req_count = 0
-        for sublist in get_partition(friends_id, size=100):
+        for sublist in parts(friends_id, size=100):
             if req_count == 3:
                 req_count = 0
-                sleep(0.99)
+                sleep(delay)
             res = requests.get(self.get_request_url(VkSession.FRIENDS_GET_MUTUAL, {
                 'source_uid': main_id,
                 'target_uids': ','.join(map(str, sublist))
@@ -77,19 +81,21 @@ class VkSession(Exception):
             raise VkSession(friends_base_info['error']['error_msg'], friends_base_info['error']['error_code'])
 
         friends_base_info = friends_base_info['response']
-        return friends, common_friends, friends_base_info, self.get_user_base_info(main_id)
+        return active_friends, common_friends, friends_base_info, self.get_user_base_info(main_id), banned_friends
 
 
 if __name__ == '__main__':
-    main_id = '324441199'
+    # main_id = '324441199'
     # main_id = '745403617'
-    # main_id = '131553710'
+    main_id = '131553710'
 
-    session = VkSession()
+    session = VkSession(
+        token='vk1.a.bsCwOjdpJauKuhGXbztYNaeVwLkQOYNUYsvSP-MZBSJvQ8pGAGgY7jPdO9D-LYU28Gxx8139lAkhBaLHhmToRPZJ6YkKfq6-2IpytxS3bmkjBKN8WV9-RiuS-mN7A2ra9Qmic1phe-70-I6M6T_Ot4GdFWvCFDpq9KRmIPjAuN3JYIp7P92BEEHSdrzbKsDY')
+    # session = VkSession(token='k0NBPBozTtW1om6I0yZ1')
     try:
 
         user_info = UserData(main_id, *session.prepare_data(main_id))
         user_info.initialize_friends()
-        user_info.dump_data_to_json('graph_data.json')
+        user_info.dump_data_to_json('../data/graph_data.json')
     except VkException as e:
         print(e.message, e.code)

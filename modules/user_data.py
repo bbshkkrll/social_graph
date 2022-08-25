@@ -3,12 +3,14 @@ from person import Person
 
 
 class UserData:
-    def __init__(self, main_id, friends: dict, common_friends: dict, friends_base_info: dict, main_id_info):
+    def __init__(self, main_id, friends: dict, common_friends: dict, friends_base_info: dict, main_id_info,
+                 banned_friends: dict):
         self.main_id = main_id
         self.friends = friends
         self.common_friends = common_friends
         self.friends_base_info = friends_base_info
         self.main_person = Person(main_id_info, common_friends=[friend['id'] for friend in self.friends])
+        self.banned_friends_ids = [friend['id'] for friend in banned_friends]
 
         self.persons = None
 
@@ -22,6 +24,8 @@ class UserData:
         for id, person in self.persons.items():
             common_friends = []
             for common_friend_id in common_friends_ids[id]:
+                if common_friend_id in self.banned_friends_ids:
+                    continue
                 common_friends.append(self.persons[common_friend_id])
 
             person.set_friends(common_friends)

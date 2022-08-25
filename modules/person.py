@@ -28,7 +28,7 @@ class Person:
                     links.append({
                         'source': f'{self.first_name} {self.last_name}',
                         'target': f'{friend.first_name} {friend.last_name}',
-                        'value': self.DEFAULT_VALUE
+                        'value': len(self.common_friends) * 10
                     })
                     Person.MUTUAL_FRIENDS.add((self.uid, friend.uid))
         node = {
