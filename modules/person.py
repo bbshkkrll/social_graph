@@ -33,7 +33,7 @@ class Person:
                     Person.MUTUAL_FRIENDS.add((self.uid, friend.uid))
         node = {
             'id': f'{self.first_name} {self.last_name}',
-            'group': self.sex
+            'group': self.sex,
         }
 
         return {
