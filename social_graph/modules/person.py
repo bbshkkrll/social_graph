@@ -26,14 +26,15 @@ class Person:
             for friend in self.common_friends:
                 if (friend.uid, self.uid) not in Person.MUTUAL_FRIENDS:
                     links.append({
-                        'source': f'{self.first_name} {self.last_name}',
-                        'target': f'{friend.first_name} {friend.last_name}',
-                        'value': len(self.common_friends) * 10
+                        'source': self.uid,
+                        'target': friend.uid,
+                        'value': len(self.common_friends)
                     })
                     Person.MUTUAL_FRIENDS.add((self.uid, friend.uid))
         node = {
-            'id': f'{self.first_name} {self.last_name}',
+            'id': self.uid,
             'group': self.sex,
+            'name': f'{self.first_name} {self.last_name}'
         }
 
         return {

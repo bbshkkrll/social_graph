@@ -1,7 +1,9 @@
 let svg = d3.select("svg"), width = +svg.attr("width"), height = +svg.attr("height");
 
 let color = d3.scaleOrdinal(d3.schemeCategory20);
-
+// .distance(function (d) {
+//     return d.value;
+// })
 let simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function (d) {
         return d.id;
@@ -32,7 +34,7 @@ d3.json("../static/data/graph_data.json", function (error, graph) {
         .selectAll("circle")
         .data(graph.nodes)
         .enter().append("circle")
-        .attr("r", 6)
+        .attr("r", 8)
         .attr("fill", function (d) {
             return color(d.group);
         })
@@ -46,7 +48,7 @@ d3.json("../static/data/graph_data.json", function (error, graph) {
 
     node.append("title")
         .text(function (d) {
-            return d.id;
+            return d.name;
         });
 
     simulation
