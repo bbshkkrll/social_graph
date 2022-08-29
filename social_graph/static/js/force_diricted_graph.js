@@ -12,7 +12,10 @@ let simulation = d3.forceSimulation()
         d.value;
     }))
     .force('y', d3.forceY().y(function () {
-        return 0;
+        return -1;
+    }))
+    .force('x', d3.forceX().x(function () {
+        return -1;
     }));
 
 d3.json("../static/data/graph_data.json", function (error, graph) {
