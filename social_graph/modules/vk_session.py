@@ -5,8 +5,8 @@ from enum import Enum
 import requests
 from time import sleep
 
-from user_data import UserData
-from partition import get_partition as parts
+from social_graph.modules.user_data import UserData
+from social_graph.modules.partition import get_partition as parts
 
 
 class VkException(Exception):

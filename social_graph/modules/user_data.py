@@ -1,5 +1,5 @@
 import json
-from person import Person
+from social_graph.modules.person import Person
 
 
 class UserData:

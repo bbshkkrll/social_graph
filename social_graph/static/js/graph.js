@@ -5,11 +5,11 @@ var svg = d3.select("svg"),
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().distance(20).strength(0.5))
-    .force("charge", d3.forceManyBody().strength(-0))
+    .force("link", d3.forceLink())
+    .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("/data/graph_data.json", function (error, graph) {
+d3.json("../static/data/graph_data.json", function (error, graph) {
     if (error) throw error;
 
     var nodes = graph.nodes,

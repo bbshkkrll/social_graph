@@ -1,9 +1,8 @@
-let svg = d3.select("svg"), width = +svg.attr("width"), height = +svg.attr("height");
+let svg = d3.select("svg.graph"), width = +svg.attr("width"), height = +svg.attr("height");
+
 
 let color = d3.scaleOrdinal(d3.schemeCategory20);
-// .distance(function (d) {
-//     return d.value;
-// })
+
 let simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function (d) {
         return d.id;
