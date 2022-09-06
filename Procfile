@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn --chdir my_folder social_graph app:app
