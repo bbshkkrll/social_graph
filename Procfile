@@ -1,1 +1,1 @@
-web: gunicorn app:social_graph/app
+web: gunicorn app:app
