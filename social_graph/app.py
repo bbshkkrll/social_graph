@@ -12,7 +12,7 @@ def graph():
 
 @app.route('/auth', methods=['GET'])
 def auth():
-    render_template(url_for('/graph'))
+    render_template('force_diricted_graph.html')
 
 
 
