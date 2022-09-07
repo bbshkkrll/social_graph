@@ -10,6 +10,11 @@ def graph():
     return render_template('force_diricted_graph.html')
 
 
+@app.route('/auth', methods=['GET'])
+def auth():
+    print(request.args.get('code'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
