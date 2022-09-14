@@ -30,16 +30,20 @@ class VkSession:
         self.token = token
 
     def get_request_url(self, method: str, fields: dict):
+        """Возвращает url для доступа к VKApi"""
         request_url = f'{VkApiMethods.BASE_URL.value}{method}?'
         for name, value in fields.items():
             request_url += f'{name}={value}&'
 
         return request_url + f'access_token={self.token}&v={self.v}'
 
-    def get_user_base_info(self, id):
+    def get_user_base_info(self, id, fields=None):
+        """Возвращает базовую информацию о пользователе"""
+        if fields is None:
+            fields = ['uid', 'first_name', 'last_name', 'photo', 'sex']
         response = requests.get(self.get_request_url(VkApiMethods.USERS_GET.value,
                                                      {'user_ids': id,
-                                                      'fields': 'uid,first_name,last_name,photo,sex'})).json()
+                                                      'fields': ','.join(fields)})).json()
 
         if 'error' in response.keys():
             raise VkException(response['error']['error_msg'], response['error']['error_code'])
@@ -47,7 +51,6 @@ class VkSession:
         return response['response'][0]
 
     def prepare_data(self, main_id, delay=0.98):
-
         friends = requests.get(
             self.get_request_url(VkApiMethods.FRIENDS_GET.value, {'fields': 'uid,first_name,last_name',
                                                                   'user_id': main_id})).json()

@@ -35,7 +35,9 @@ d3.json("../static/data/graph_data.json", function (error, graph) {
         .enter().append("circle")
         .attr("r", 8)
         .attr("fill", function (d) {
-            return color(d.group);
+            if (d.group > 1)
+                return '#8ecae6';
+            return '#cf91b5';
         })
         .on("click", click)
         .on('dblclick', r_click)
