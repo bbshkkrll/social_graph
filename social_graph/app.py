@@ -12,7 +12,9 @@ def graph():
 
 @app.route('/auth', methods=['GET'])
 def auth():
-    render_template('login.html')
+    print(request.args.get('code'))
+    return render_template('index.html')
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
