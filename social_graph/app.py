@@ -16,7 +16,7 @@ def auth():
     return render_template('index.html')
 
 
-
+"""https://oauth.vk.com/authorize?client_id=51395060&display=page&redirect_uri=https://vk-social-graph.herokuapp.com/auth&scope=friends&response_type=code&v=5.131"""
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
