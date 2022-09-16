@@ -3,9 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Авторизация</title>
+    <style>
+        div.container4 {
+            height: 10em;
+            position: relative
+        }
+
+        div.container4 button {
+            background: blue;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: 0 -50% 0 0;
+            transform: translate(-50%, -50%)
+        }
+    </style>
 </head>
 <body>
-<form action="/login" method="post">
-    <p><label>User id:</label> <input type="text" name="uid" value=""/></p>
-    <p><input type="submit" value="Enter"></p>
-</form>
+<div class="container4">
+    <form action="https://oauth.vk.com/authorize?client_id=51395060&display=page&redirect_uri=https://vk-social-graph.herokuapp.com/auth&scope=friends&response_type=code&v=5.131">
+        <button type="submit">Login with VK</button>
+    </form>
+</div>
+</body>
+</html>
