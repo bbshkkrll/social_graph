@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route("/graph")
 def graph():
     token = request.cookies.get('token')
-    vk_session = VkSession(token)
+    vk_session = VkSession(token=token)
 
     user_info = UserData(vk_session.main_id, *vk_session.prepare_data())
     user_info.initialize_friends()
