@@ -72,7 +72,7 @@ class VkSession:
         })
         response = requests.get(url).json()
         if 'error' in response.keys():
-            raise VkException
+            raise VkException(response['error'], response['error_code'])
         return response['response']['id']
 
     def get_access_token(self, code):
