@@ -13,9 +13,7 @@ def graph():
 @app.route('/auth', methods=['GET'])
 def auth():
     vk_session = VkSession()
-    response = make_response(render_template('login.html'))
-    response.set_cookie('token', vk_session.get_access_token(request.args.get('code')))
-    return response
+    return render_template(f'{vk_session.get_access_token(request.args.get("code"))}')
 
 
 @app.route('/login', methods=['GET', 'POST'])
