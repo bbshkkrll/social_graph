@@ -86,7 +86,6 @@ class VkSession:
         }, token=False)
 
         response = requests.get(url).json()
-
         if 'error' in response.keys():
             raise VkException(response['error'], response['error_description'])
 

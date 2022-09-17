@@ -21,8 +21,8 @@ def graph():
 
 @app.route('/auth', methods=['GET'])
 def auth():
-    vk_session = VkSession()
     code = request.args.get('code')
+    vk_session = VkSession()
     token = vk_session.get_access_token(code)
     vk_session = VkSession(token=token)
     current_id = vk_session.get_current_user_id()
