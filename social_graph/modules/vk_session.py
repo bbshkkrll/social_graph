@@ -55,6 +55,7 @@ class VkSession:
     def __init__(self, version=os.environ['VK_API_VERSION'], token=os.environ['VK_API_TOKEN']):
         self.v = version
         self.token = token
+        self.main_id = self.get_current_user_id()
 
     def get_request_url(self, url: str, method: str, fields: dict, token=True):
         """Возвращает url для доступа к VKApi"""
@@ -65,14 +66,14 @@ class VkSession:
             return request_url + f'access_token={self.token}&v={self.v}'
         return f'{request_url}v={self.v}'
 
-    def get_info_about_current_user(self):
+    def get_current_user_id(self):
         url = self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.USERS_GET.value, fields={
-            VkApiKeys.FIELDS.value: ''.join(['screen_name', 'id'])
+            VkApiKeys.FIELDS.value: ''.join(['id'])
         })
         response = requests.get(url).json()
         if 'error' in response.keys():
             raise VkException
-        return response
+        return response['response']['id']
 
     def get_access_token(self, code):
         url = self.get_request_url(VkApiMethods.OUAUTH_URL.value, VkApiMethods.ACCESS_TOKEN.value, fields={
@@ -104,12 +105,14 @@ class VkSession:
 
         return response['response'][0]
 
-    def prepare_data(self, main_id, delay=0.98):
+    def prepare_data(self, id=None, delay=0.35):
+        if id is None:
+            id = self.main_id
         friends = requests.get(
             self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.FRIENDS_GET.value,
                                  {'fields': ','.join([VkApiFields.UID.value, VkApiFields.FIRST_NAME.value,
                                                       VkApiFields.LAST_NAME.value]),
-                                  'user_id': main_id})).json()
+                                  'user_id': id})).json()
 
         if 'error' in friends.keys():
             raise VkException(friends['error']['error_msg'], friends['error']['error_code'])
@@ -122,17 +125,14 @@ class VkSession:
         common_friends = []
         req_count = 0
         for sublist in parts(friends_id, size=100):
-            if req_count == 3:
-                req_count = 0
-                sleep(delay)
             res = requests.get(
                 self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.FRIENDS_GET_MUTUAL.value, {
-                    'source_uid': main_id,
+                    'source_uid': id,
                     'target_uids': ','.join(map(str, sublist))
 
                 })).json()
 
-            req_count += 1
+            sleep(delay)
 
             if 'error' in res.keys():
                 raise VkException(res['error']['error_msg'], res['error']['error_code'])
@@ -148,7 +148,7 @@ class VkSession:
             raise VkException(friends_base_info['error']['error_msg'], friends_base_info['error']['error_code'])
 
         friends_base_info = friends_base_info['response']
-        return active_friends, common_friends, friends_base_info, self.get_user_base_info(main_id), banned_friends
+        return active_friends, common_friends, friends_base_info, self.get_user_base_info(id), banned_friends
 
 
 if __name__ == '__main__':

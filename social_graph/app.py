@@ -7,7 +7,14 @@ app = Flask(__name__)
 
 @app.route("/graph")
 def graph():
-    render_template('force_diricted_graph.html')
+    token = request.cookies.get('token')
+    vk_session = VkSession(token)
+
+    user_info = UserData(vk_session.main_id, *vk_session.prepare_data())
+    user_info.initialize_friends()
+    user_info.dump_data_to_json('./static/data/graph_data.json')
+
+    return render_template('force_diricted_graph.html')
 
 
 @app.route('/auth', methods=['GET'])
@@ -18,7 +25,7 @@ def auth():
     vk_session = VkSession(token=token)
 
     response = make_response(
-        render_template('login.html', token=token, user_info=vk_session.get_info_about_current_user()))
+        render_template('login.html', token=token, user_info=vk_session.get_current_user_id()))
     response.set_cookie('code', code)
     response.set_cookie('token', token)
 
