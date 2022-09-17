@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, session, make_response
 from modules.vk_session import VkSession, VkException
 from social_graph.modules.user_data import UserData
 
@@ -13,8 +13,9 @@ def graph():
 @app.route('/auth', methods=['GET'])
 def auth():
     vk_session = VkSession()
-
-    return render_template('login.html', token=vk_session.get_access_token(request.args.get('code')))
+    response = make_response(render_template('login.html'))
+    response.set_cookie('token', vk_session.get_access_token(request.args.get('code')))
+    return response
 
 
 @app.route('/login', methods=['GET', 'POST'])
