@@ -55,7 +55,6 @@ class VkSession:
     def __init__(self, version=os.environ['VK_API_VERSION'], token=os.environ['VK_API_TOKEN']):
         self.v = version
         self.token = token
-        self.main_id = self.get_current_user_id()
 
     def get_request_url(self, url: str, method: str, fields: dict, token=True):
         """Возвращает url для доступа к VKApi"""
@@ -69,12 +68,14 @@ class VkSession:
     def get_current_user_id(self):
         url = self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.USERS_GET.value, fields={
             VkApiKeys.FIELDS.value: ''.join(['id'])
-        })
+        }, token=True)
+        print(url)
         response = requests.get(url).json()
+
+        print(response)
         if 'error' in response.keys():
-            print(response)
             raise VkException(response['error']['error_msg'], response['error']['error_code'])
-        return response['response']['id']
+        return response['response'][0]['id']
 
     def get_access_token(self, code):
         url = self.get_request_url(VkApiMethods.OUAUTH_URL.value, VkApiMethods.ACCESS_TOKEN.value, fields={
@@ -83,7 +84,7 @@ class VkSession:
             VkApiKeys.REDIRECT_URI.value: os.environ['REDIRECT_URI'],
             VkApiKeys.CODE.value: code
         }, token=False)
-        print(url)
+
         response = requests.get(url).json()
 
         if 'error' in response.keys():
@@ -108,7 +109,7 @@ class VkSession:
 
     def prepare_data(self, id=None, delay=0.35):
         if id is None:
-            id = self.main_id
+            id = self.get_current_user_id()
         friends = requests.get(
             self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.FRIENDS_GET.value,
                                  {'fields': ','.join([VkApiFields.UID.value, VkApiFields.FIRST_NAME.value,

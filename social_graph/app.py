@@ -23,11 +23,13 @@ def auth():
     code = request.args.get('code')
     token = vk_session.get_access_token(code)
     vk_session = VkSession(token=token)
-
+    print(token)
     response = make_response(
         render_template('login.html', token=token, user_info=vk_session.get_current_user_id()))
     response.set_cookie('code', code)
     response.set_cookie('token', token)
+
+    session.modified = True
 
     return response
 
