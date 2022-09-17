@@ -14,7 +14,7 @@ def graph():
 def auth():
     vk_session = VkSession()
 
-    return render_template('index.html', token=vk_session.get_access_token(request.args.get('code')))
+    return render_template('login.html', token=vk_session.get_access_token(request.args.get('code')))
 
 
 @app.route('/login', methods=['GET', 'POST'])
