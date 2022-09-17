@@ -22,6 +22,7 @@ def graph():
 @app.route('/auth', methods=['GET'])
 def auth():
     code = request.args.get('code')
+
     vk_session = VkSession()
     token = vk_session.get_access_token(code)
     vk_session = VkSession(token=token)
@@ -35,7 +36,7 @@ def auth():
     return response
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/')
 def login():
     return render_template('login.html')
 
