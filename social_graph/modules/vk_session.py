@@ -75,11 +75,12 @@ class VkSession:
 
     def get_access_token(self, code):
         url = self.get_request_url(VkApiMethods.OUAUTH_URL.value, VkApiMethods.ACCESS_TOKEN.value, fields={
-            VkApiKeys.CLIENT_ID: os.environ['CLIENT_ID'],
-            VkApiKeys.CLIENT_SECRET: os.environ['CLIENT_SECRET'],
-            VkApiKeys.REDIRECT_URI: os.environ['REDIRECT_URI'],
-            VkApiKeys.CODE: code
+            VkApiKeys.CLIENT_ID.value: os.environ['CLIENT_ID'],
+            VkApiKeys.CLIENT_SECRET.value: os.environ['CLIENT_SECRET'],
+            VkApiKeys.REDIRECT_URI.value: os.environ['REDIRECT_URI'],
+            VkApiKeys.CODE.value: code
         }, token=False)
+        print(url)
         response = requests.get(url).json()
 
         if 'error' in response.keys():
