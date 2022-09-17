@@ -9,10 +9,12 @@ app = Flask(__name__)
 def graph():
     token = request.cookies.get('token')
     vk_session = VkSession(token=token)
-
-    user_info = UserData(vk_session.main_id, *vk_session.prepare_data())
-    user_info.initialize_friends()
-    user_info.dump_data_to_json('./static/data/graph_data.json')
+    try:
+        user_info = UserData(request.cookies.get('current_id'), *vk_session.prepare_data())
+        user_info.initialize_friends()
+        user_info.dump_data_to_json('/static/data/graph_data.json')
+    except VkException as e:
+        print(e.message, e.code)
 
     return render_template('force_diricted_graph.html')
 
@@ -23,11 +25,12 @@ def auth():
     code = request.args.get('code')
     token = vk_session.get_access_token(code)
     vk_session = VkSession(token=token)
-    print(token)
+    current_id = vk_session.get_current_user_id()
     response = make_response(
-        render_template('login.html', token=token, user_info=vk_session.get_current_user_id()))
+        render_template('login.html', token=token, user_info=current_id))
     response.set_cookie('code', code)
     response.set_cookie('token', token)
+    response.set_cookie('current_id', current_id)
 
     session.modified = True
 

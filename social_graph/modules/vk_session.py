@@ -125,7 +125,7 @@ class VkSession:
         friends_id = [friend['id'] for friend in active_friends]
 
         common_friends = []
-        req_count = 0
+
         for sublist in parts(friends_id, size=100):
             res = requests.get(
                 self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.FRIENDS_GET_MUTUAL.value, {
