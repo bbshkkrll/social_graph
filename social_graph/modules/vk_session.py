@@ -85,7 +85,7 @@ class VkSession:
         if 'error' in response.keys():
             raise VkException(response['error'], response['error_description'])
 
-        print(response)
+        return response['access_token']
 
     def get_user_base_info(self, id, fields=None):
         """Возвращает базовую информацию о пользователе"""
