@@ -12,11 +12,11 @@ def graph():
 
 @app.route('/auth', methods=['GET'])
 def auth():
-    print(request.args.get('code'))
-    return render_template('index.html')
+    vk_session = VkSession()
+
+    return render_template('index.html', token=vk_session.get_access_token(request.args.get('code')))
 
 
-"""https://oauth.vk.com/authorize?client_id=51395060&display=page&redirect_uri=https://vk-social-graph.herokuapp.com/auth&scope=friends&response_type=code&v=5.131"""
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

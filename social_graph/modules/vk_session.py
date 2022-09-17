@@ -20,7 +20,33 @@ class VkApiMethods(Enum):
     USERS_GET = 'users.get'
     FRIENDS_GET_MUTUAL = 'friends.getMutual'
     EXECUTE_GET_MUTUAL_FRIENDS = 'execute.get_mutual_friends'
-    BASE_URL = 'https://api.vk.com/method/'
+    AUTHORIZE = 'authorize'
+    ACCESS_TOKEN = 'access_token'
+    METHOD_URL = 'https://api.vk.com/method/'
+    OUAUTH_URL = 'https://oauth.vk.com/'
+
+
+class VkApiFields(Enum):
+    UID = 'uid'
+    FIRST_NAME = 'first_name'
+    LAST_NAME = 'last_name'
+    SEX = 'sex'
+    PHOTO = 'photo'
+    PAGE = 'page'
+    FRIENDS = 'friends'
+    CODE = 'code'
+
+
+class VkApiKeys(Enum):
+    DISPLAY = 'display'
+    USER_ID = 'user_id'
+    USER_IDS = 'user_ids'
+    CLIENT_ID = 'client_id'
+    CLIENT_SECRET = 'client_secret'
+    REDIRECT_URI = 'redirect_uri'
+    CODE = 'code'
+    SCOPE = 'scope'
+    RESPONSE_TYPE = 'response_type'
 
 
 class VkSession:
@@ -29,20 +55,46 @@ class VkSession:
         self.v = version
         self.token = token
 
-    def get_request_url(self, method: str, fields: dict):
+    def get_request_url(self, url: str, method: str, fields: dict, token=True):
         """Возвращает url для доступа к VKApi"""
-        request_url = f'{VkApiMethods.BASE_URL.value}{method}?'
+        request_url = f'{url}{method}?'
         for name, value in fields.items():
             request_url += f'{name}={value}&'
+        if token:
+            return request_url + f'access_token={self.token}&v={self.v}'
+        return f'{request_url}v={self.v}'
 
-        return request_url + f'access_token={self.token}&v={self.v}'
+    def get_code_url(self):
+        return self.get_request_url(VkApiMethods.OUAUTH_URL.value, VkApiMethods.AUTHORIZE.value, fields={
+            VkApiKeys.CLIENT_ID.value: '51395060',
+            VkApiKeys.REDIRECT_URI: 'https://vk-social-graph.herokuapp.com/auth',
+            VkApiKeys.DISPLAY: VkApiFields.PAGE,
+            VkApiKeys.SCOPE: VkApiFields.FRIENDS,
+            VkApiKeys.RESPONSE_TYPE: VkApiFields.CODE,
+        }, token=False)
+
+    def get_access_token(self, code):
+        url = self.get_request_url(VkApiMethods.OUAUTH_URL.value, VkApiMethods.ACCESS_TOKEN.value, fields={
+            VkApiKeys.CLIENT_ID: os.environ['CLIENT_ID'],
+            VkApiKeys.CLIENT_SECRET: os.environ['CLIENT_SECRET'],
+            VkApiKeys.REDIRECT_URI: os.environ['REDIRECT_URI'],
+            VkApiKeys.CODE: code
+        }, token=False)
+        response = requests.get(url).json()
+
+        if 'error' in response.keys():
+            raise VkException(response['error'], response['error_description'])
+
+        print(response)
 
     def get_user_base_info(self, id, fields=None):
         """Возвращает базовую информацию о пользователе"""
         if fields is None:
-            fields = ['uid', 'first_name', 'last_name', 'photo', 'sex']
-        response = requests.get(self.get_request_url(VkApiMethods.USERS_GET.value,
-                                                     {'user_ids': id,
+            fields = [VkApiFields.UID.value, VkApiFields.FIRST_NAME.value, VkApiFields.LAST_NAME.value,
+                      VkApiFields.PHOTO.value,
+                      VkApiFields.SEX.value]
+        response = requests.get(self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.USERS_GET.value,
+                                                     {VkApiKeys.USER_IDS.value: id,
                                                       'fields': ','.join(fields)})).json()
 
         if 'error' in response.keys():
@@ -52,8 +104,10 @@ class VkSession:
 
     def prepare_data(self, main_id, delay=0.98):
         friends = requests.get(
-            self.get_request_url(VkApiMethods.FRIENDS_GET.value, {'fields': 'uid,first_name,last_name',
-                                                                  'user_id': main_id})).json()
+            self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.FRIENDS_GET.value,
+                                 {'fields': ','.join([VkApiFields.UID.value, VkApiFields.FIRST_NAME.value,
+                                                      VkApiFields.LAST_NAME.value]),
+                                  'user_id': main_id})).json()
 
         if 'error' in friends.keys():
             raise VkException(friends['error']['error_msg'], friends['error']['error_code'])
@@ -69,11 +123,12 @@ class VkSession:
             if req_count == 3:
                 req_count = 0
                 sleep(delay)
-            res = requests.get(self.get_request_url(VkApiMethods.FRIENDS_GET_MUTUAL.value, {
-                'source_uid': main_id,
-                'target_uids': ','.join(map(str, sublist))
+            res = requests.get(
+                self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.FRIENDS_GET_MUTUAL.value, {
+                    'source_uid': main_id,
+                    'target_uids': ','.join(map(str, sublist))
 
-            })).json()
+                })).json()
 
             req_count += 1
 
@@ -83,8 +138,9 @@ class VkSession:
             common_friends.extend(res['response'])
 
         friends_base_info = requests.get(
-            self.get_request_url(VkApiMethods.USERS_GET.value, {'fields': 'uid,first_name,last_name,photo,sex',
-                                                                'user_ids': ','.join(map(str, friends_id))})).json()
+            self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.USERS_GET.value,
+                                 {'fields': 'uid,first_name,last_name,photo,sex',
+                                  'user_ids': ','.join(map(str, friends_id))})).json()
 
         if 'error' in friends_base_info.keys():
             raise VkException(friends_base_info['error']['error_msg'], friends_base_info['error']['error_code'])
@@ -95,11 +151,6 @@ class VkSession:
 
 if __name__ == '__main__':
     main_id = '324441199'
-    # main_id = '745403617'
-    # main_id = '131553710'
-
-    # session = VkSession(
-    # token='vk1.a.bsCwOjdpJauKuhGXbztYNaeVwLkQOYNUYsvSP-MZBSJvQ8pGAGgY7jPdO9D-LYU28Gxx8139lAkhBaLHhmToRPZJ6YkKfq6-2IpytxS3bmkjBKN8WV9-RiuS-mN7A2ra9Qmic1phe-70-I6M6T_Ot4GdFWvCFDpq9KRmIPjAuN3JYIp7P92BEEHSdrzbKsDY')
     session = VkSession()
     try:
 
