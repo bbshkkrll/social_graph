@@ -12,7 +12,7 @@ def graph():
     try:
         user_info = UserData(request.cookies.get('current_id'), *vk_session.prepare_data())
         user_info.initialize_friends()
-        user_info.dump_data_to_json('/static/data/graph_data.json')
+        user_info.dump_data_to_json('./static/data/graph_data.json')
     except VkException as e:
         print(e.message, e.code)
 
