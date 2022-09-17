@@ -47,6 +47,7 @@ class VkApiKeys(Enum):
     CODE = 'code'
     SCOPE = 'scope'
     RESPONSE_TYPE = 'response_type'
+    FIELDS = 'fields'
 
 
 class VkSession:
@@ -64,14 +65,14 @@ class VkSession:
             return request_url + f'access_token={self.token}&v={self.v}'
         return f'{request_url}v={self.v}'
 
-    def get_code_url(self):
-        return self.get_request_url(VkApiMethods.OUAUTH_URL.value, VkApiMethods.AUTHORIZE.value, fields={
-            VkApiKeys.CLIENT_ID.value: '51395060',
-            VkApiKeys.REDIRECT_URI: 'https://vk-social-graph.herokuapp.com/auth',
-            VkApiKeys.DISPLAY: VkApiFields.PAGE,
-            VkApiKeys.SCOPE: VkApiFields.FRIENDS,
-            VkApiKeys.RESPONSE_TYPE: VkApiFields.CODE,
-        }, token=False)
+    def get_info_about_current_user(self):
+        url = self.get_request_url(VkApiMethods.METHOD_URL.value, VkApiMethods.USERS_GET.value, fields={
+            VkApiKeys.FIELDS.value: ''.join(['screen_name', 'id'])
+        })
+        response = requests.get(url).json()
+        if 'error' in response.keys():
+            raise VkException
+        return response
 
     def get_access_token(self, code):
         url = self.get_request_url(VkApiMethods.OUAUTH_URL.value, VkApiMethods.ACCESS_TOKEN.value, fields={
