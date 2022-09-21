@@ -1,5 +1,5 @@
-let svg = d3.select("svg.graph"), width = +svg.attr("width"), height = +svg.attr("height");
-
+let divOuter = document.getElementById('outer');
+let svg = d3.select("svg.graph"), width = divOuter.clientWidth, height = divOuter.clientHeight;
 
 let color = d3.scaleOrdinal(d3.schemeCategory20);
 
