@@ -150,15 +150,3 @@ class VkSession:
 
         friends_base_info = friends_base_info['response']
         return active_friends, common_friends, friends_base_info, self.get_user_base_info(id), banned_friends
-
-
-if __name__ == '__main__':
-    main_id = '324441199'
-    session = VkSession()
-    try:
-
-        user_info = UserData(main_id, *session.prepare_data(main_id))
-        user_info.initialize_friends()
-        user_info.dump_data_to_json('../static/data/graph_data.json')
-    except VkException as e:
-        print(e.message, e.code)
