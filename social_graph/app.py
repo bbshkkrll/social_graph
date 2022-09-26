@@ -10,17 +10,19 @@ app = Flask(__name__)
 def graph():
     code = request.cookies.get('code')
 
-    try:
-        vk_session = VkSession()
-        token = vk_session.get_access_token(code)
-        vk_session = VkSession(token=token)
-        user_info = UserData(vk_session.get_current_user_id(), *vk_session.prepare_data())
-        user_info.initialize_friends()
-        user_info.dump_data_to_json('./static/data/graph_data.json')
-    except VkException as e:
-        return render_template('server_error.html', error_msg=e.message)
+    render_template('code.html', code=code)
 
-    return render_template('index.html')
+    # try:
+    #     vk_session = VkSession()
+    #     token = vk_session.get_access_token(code)
+    #     vk_session = VkSession(token=token)
+    #     user_info = UserData(vk_session.get_current_user_id(), *vk_session.prepare_data())
+    #     user_info.initialize_friends()
+    #     user_info.dump_data_to_json('./static/data/graph_data.json')
+    # except VkException as e:
+    #     return render_template('server_error.html', error_msg=e.message)
+    #
+    # return render_template('index.html')
 
 
 @app.route('/auth', methods=['GET'])
