@@ -38,7 +38,7 @@ def auth():
     #     "user_id": 66748
     # }
 
-    return redirect(url_for('graph'), 200, response)
+    return redirect(url_for('graph'), 301, response)
 
 
 @app.route('/')
