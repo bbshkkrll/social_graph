@@ -10,8 +10,7 @@ app = Flask(__name__)
 def graph():
     code = request.cookies.get('code')
 
-    render_template('code.html', code=code)
-
+    return render_template('code.html', code=code)
     # try:
     #     vk_session = VkSession()
     #     token = vk_session.get_access_token(code)
