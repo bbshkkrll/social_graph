@@ -6,6 +6,14 @@ from social_graph.modules.vk_exception import VkException
 app = Flask(__name__)
 
 
+# example
+# {
+#     "access_token": "533bacf01e11f55b536a565b57531ac114461ae8736d6506a3",
+#     "expires_in": 43200,
+#     "user_id": 66748
+# }
+
+
 @app.route("/graph")
 def graph():
     code = request.cookies.get('code')
@@ -26,18 +34,11 @@ def graph():
 
 @app.route('/auth', methods=['GET'])
 def auth():
+    response = make_response(redirect(url_for('graph')))
     code = request.args.get('code')
-
-    response = make_response()
     response.set_cookie('code', code)
-    # example
-    # {
-    #     "access_token": "533bacf01e11f55b536a565b57531ac114461ae8736d6506a3",
-    #     "expires_in": 43200,
-    #     "user_id": 66748
-    # }
 
-    return redirect(url_for('graph'), 301, response)
+    return response
 
 
 @app.route('/')
