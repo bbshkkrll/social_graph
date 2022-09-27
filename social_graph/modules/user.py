@@ -28,10 +28,10 @@ class User:
 
     def save_graph(self, filename=None):
         if filename is None:
-            filename = f'./static/data/graph_data_{self.user_id}.json'
+            filename = f'../static/data/graph_data_{self.user_id}.json'
         if self.graph is not None:
-            with open(filename, 'w', encoding='utf-8'):
-                json.dump(self.graph.graph, filename, ensure_ascii=False)
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(self.graph.graph, f, ensure_ascii=False)
         else:
             self.graph = Graph(self)
             self.save_graph(self.graph.graph)
