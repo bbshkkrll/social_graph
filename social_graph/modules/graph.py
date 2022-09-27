@@ -1,8 +1,5 @@
-from social_graph.modules.user import User
-
-
 class Graph:
-    def __init__(self, user: User):
+    def __init__(self, user):
         self.user = user
         self.graph = self.initialize_graph()
 
