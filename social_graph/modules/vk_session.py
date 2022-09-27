@@ -26,13 +26,29 @@ class VkSession:
             return request_url + f'{api_keys.ACCESS_TOKEN.value}={self.token}&{api_keys.V.value}={self.v}'
         return f'{request_url}{api_keys.V.value}={self.v}'
 
-    def get_current_user_id(self):
+    def get_current_user_base_info(self):
+        """
+        {
+            "response":[
+                0:{
+                "id":74540XXXX
+                "sex":1
+                "first_name":"X"
+                "last_name":"X"
+                "can_access_closed":true
+                "is_closed":false
+                }
+            ]
+        }
+        """
         url = self.get_request_url(api_methods.METHOD_URL.value, api_methods.USERS_GET.value, fields={
-            api_keys.FIELDS.value: ''.join([api_fields.ID.value])
+            api_keys.FIELDS.value: ''.join([api_fields.FIRST_NAME,
+                                            api_fields.LAST_NAME.value,
+                                            api_fields.SEX.value])
         }, token=True)
 
         response = resp(requests.get(url).json())
-        return response['id']
+        return response['response'][0]
 
     def get_access(self, code):
         url = self.get_request_url(api_methods.OUAUTH_URL.value, api_methods.ACCESS_TOKEN.value, fields={

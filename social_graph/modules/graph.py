@@ -28,7 +28,26 @@ class Graph:
             nodes.append(node)
             links.extend(friend_links)
 
+            user_node, user_links = self.add_user_to_graph(require_links)
+
+            nodes.append(user_node)
+            nodes.extend(user_links)
+
         return {
             'links': links,
             'nodes': nodes
         }
+
+    def add_user_to_graph(self, requre_links):
+        node = {
+            'name': f'{self.user.first_name} {self.user.last_name}',
+            'if': self.user.user_id,
+            'group': self.user.sex
+        }
+
+        links = [{'source': self.user.user_id,
+                  'target': friend_id,
+                  'value': 1} for friend_id in self.user.friends_ids if
+                 (friend_id, self.user.user_id) not in requre_links]
+
+        return node, links
