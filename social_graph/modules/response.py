@@ -5,7 +5,7 @@ from social_graph.modules.vk_exception import VkException
 class VkApiResponse:
     def __init__(self, response: dict):
         if VkApiErrors.ERROR.value in response.keys():
-            raise VkException('Error in response')
+            raise VkException(response.values())
 
         self._response = response
 
