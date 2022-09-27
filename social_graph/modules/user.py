@@ -34,6 +34,6 @@ class User:
                 json.dump(self.graph.graph, f, ensure_ascii=False)
         else:
             self.graph = Graph(self)
-            self.save_graph(self.graph.graph)
+            self.save_graph()
 
         return filename
