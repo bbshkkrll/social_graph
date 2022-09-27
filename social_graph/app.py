@@ -15,13 +15,13 @@ def graph():
     code = request.cookies.get('code')
 
     try:
-        access = app_session.get_access(code)
+        access = app_session. get_access(code)
         usr = User(access['expires_in'], access['user_id'], access['access_token'])
         usr.save_graph()
 
         return render_template('index.html')
     except VkException as e:
-        render_template('server_error.html', error_msg=e.message)
+        return render_template('server_error.html', error_msg=e.message)
 
 
 @app.route('/auth', methods=['GET'])
