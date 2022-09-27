@@ -2,14 +2,14 @@ from enum import Enum
 
 
 class VkApiMethods(Enum):
+    EXECUTE_GET_MUTUAL_FRIENDS = 'execute.get_mutual_friends'
+    METHOD_URL = 'https://api.vk.com/method/'
+    FRIENDS_GET_MUTUAL = 'friends.getMutual'
+    OUAUTH_URL = 'https://oauth.vk.com/'
+    ACCESS_TOKEN = 'access_token'
     FRIENDS_GET = 'friends.get'
     USERS_GET = 'users.get'
-    FRIENDS_GET_MUTUAL = 'friends.getMutual'
-    EXECUTE_GET_MUTUAL_FRIENDS = 'execute.get_mutual_friends'
     AUTHORIZE = 'authorize'
-    ACCESS_TOKEN = 'access_token'
-    METHOD_URL = 'https://api.vk.com/method/'
-    OUAUTH_URL = 'https://oauth.vk.com/'
 
 
 class VkApiFields(Enum):
@@ -25,22 +25,23 @@ class VkApiFields(Enum):
 
 
 class VkApiKeys(Enum):
+    CLIENT_SECRET = 'client_secret'
+    RESPONSE_TYPE = 'response_type'
+    REDIRECT_URI = 'redirect_uri'
+    ACCESS_TOKEN = 'access_token'
+    TARGET_UIDS = 'target_uids'
+    CLIENT_ID = 'client_id'
+    USER_IDS = 'user_ids'
     DISPLAY = 'display'
     USER_ID = 'user_id'
-    USER_IDS = 'user_ids'
-    CLIENT_ID = 'client_id'
-    CLIENT_SECRET = 'client_secret'
-    REDIRECT_URI = 'redirect_uri'
-    CODE = 'code'
-    SCOPE = 'scope'
-    RESPONSE_TYPE = 'response_type'
     FIELDS = 'fields'
-    ACCESS_TOKEN = 'access_token'
+    SCOPE = 'scope'
+    CODE = 'code'
     V = 'v'
 
 
-class VkApiError(Enum):
-    ERROR = 'error'
+class VkApiErrors(Enum):
+    ERROR_DSCPN = 'error_description'
     ERROR_CODE = 'error_code'
     ERROR_MSG = 'error_msg'
-    ERROR_DSCPN = 'error_description'
+    ERROR = 'error'
