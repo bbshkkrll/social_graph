@@ -4,8 +4,6 @@ class Graph:
         self.graph = self.initialize_graph()
 
     def initialize_graph(self):
-        if self.graph is not None:
-            return self.graph
         require_links = set()
         links = []
         nodes = []
