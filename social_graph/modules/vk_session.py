@@ -73,7 +73,7 @@ class VkSession:
                                        # без id, найдет по токену
                                    })
 
-        response = resp(requests.get(url))
+        response = resp(requests.get(url).json())
         return response['response']['items']
 
     def get_mutual_friends(self, friends, delay=0.35):
