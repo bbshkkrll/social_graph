@@ -19,7 +19,9 @@ let simulation = d3.forceSimulation()
         return -1;
     }));
 
-d3.json(getFilename(), function (error, graph) {
+let filename = getFilename();
+
+d3.json(filename, function (error, graph) {
     if (error) throw error;
 
     let link = svg.append("g")
