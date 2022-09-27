@@ -42,9 +42,10 @@ class VkSession:
         }
         """
         url = self.get_request_url(api_methods.METHOD_URL.value, api_methods.USERS_GET.value, fields={
-            api_keys.FIELDS.value: ''.join([api_fields.FIRST_NAME.value,
-                                            api_fields.LAST_NAME.value,
-                                            api_fields.SEX.value])
+            api_keys.FIELDS.value: ','.join([api_fields.FIRST_NAME.value,
+                                             api_fields.LAST_NAME.value,
+                                             api_fields.SEX.value,
+                                             ])
         }, token=True)
 
         response = resp(requests.get(url).json())
