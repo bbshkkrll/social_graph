@@ -45,86 +45,86 @@ class VkSession:
             api_keys.CODE.value: code
         }, token=False)
 
-        try:
-            response = resp(requests.get(url).json())
-            return response[api_keys.ACCESS_TOKEN.value]
-        except VkException as e:
-            print(e.message)
+        response = resp(requests.get(url).json())
+        return response
 
-    def get_users_base_info(self, ids, fields=None):
-        """Возвращает базовую информацию о пользователе"""
-        if fields is None:
-            fields = [api_fields.UID.value,
-                      api_fields.FIRST_NAME.value,
-                      api_fields.LAST_NAME.value,
-                      api_fields.PHOTO.value,
-                      api_fields.SEX.value]
 
-        url = self.get_request_url(api_methods.METHOD_URL.value, api_methods.USERS_GET.value,
-                                   {api_keys.USER_IDS.value: ','.join(ids),
-                                    api_keys.FIELDS.value: ','.join(fields)})
+def get_users_base_info(self, ids, fields=None):
+    """Возвращает базовую информацию о пользователе"""
+    if fields is None:
+        fields = [api_fields.UID.value,
+                  api_fields.FIRST_NAME.value,
+                  api_fields.LAST_NAME.value,
+                  api_fields.PHOTO.value,
+                  api_fields.SEX.value]
 
-        try:
-            response = resp(requests.get(url).json())
-            return response['response']
-        except VkException as e:
-            print(e.message)
+    url = self.get_request_url(api_methods.METHOD_URL.value, api_methods.USERS_GET.value,
+                               {api_keys.USER_IDS.value: ','.join(ids),
+                                api_keys.FIELDS.value: ','.join(fields)})
 
-    def get_friends(self):
-        url = self.get_request_url(api_methods.METHOD_URL.value,
-                                   api_methods.FRIENDS_GET.value,
-                                   fields={
-                                       api_keys.FIELDS.value: ','.join(
-                                           [api_fields.UID.value,
-                                            api_fields.FIRST_NAME.value,
-                                            api_fields.LAST_NAME.value,
-                                            api_fields.SEX.value]),
-                                       # без id, найдет по токену
-                                   })
+    try:
+        response = resp(requests.get(url).json())
+        return response['response']
+    except VkException as e:
+        print(e.message)
 
-        try:
-            response = resp(requests.get(url))
-            return response['response']['items']
-        except VkException as e:
-            print(e.message, 'friends')
 
-    def get_mutual_friends(self, friends, delay=0.35):
-        """
-        Example response
-            {
-                "response":[
-                    0:{
-                        "common_count":3
-                        "common_friends":[
-                            0:324441199
-                            1:507388294
-                            2:714374754
-                        ]
-                    "id":131553710
-                }
-                    1:{
-                        "common_count":1
-                        "common_friends":[
-                            0:131553710
-                        ]
-                    "id": 507388294
-                }
+def get_friends(self):
+    url = self.get_request_url(api_methods.METHOD_URL.value,
+                               api_methods.FRIENDS_GET.value,
+                               fields={
+                                   api_keys.FIELDS.value: ','.join(
+                                       [api_fields.UID.value,
+                                        api_fields.FIRST_NAME.value,
+                                        api_fields.LAST_NAME.value,
+                                        api_fields.SEX.value]),
+                                   # без id, найдет по токену
+                               })
+
+    try:
+        response = resp(requests.get(url))
+        return response['response']['items']
+    except VkException as e:
+        print(e.message, 'friends')
+
+
+def get_mutual_friends(self, friends, delay=0.35):
+    """
+    Example response
+        {
+            "response":[
+                0:{
+                    "common_count":3
+                    "common_friends":[
+                        0:324441199
+                        1:507388294
+                        2:714374754
+                    ]
+                "id":131553710
             }
-        """
-        common_friends = []
+                1:{
+                    "common_count":1
+                    "common_friends":[
+                        0:131553710
+                    ]
+                "id": 507388294
+            }
+        }
+    """
+    common_friends = []
 
-        for part in parts(friends):
-            url = self.get_request_url(api_methods.METHOD_URL.value,
-                                       api_methods.FRIENDS_GET_MUTUAL.value,
-                                       fields={
-                                           api_keys.TARGET_UIDS.value: ','.join(map(str, part))
-                                       })
-            try:
-                response = resp(requests.get(url).json())
-                common_friends.extend(response['response'])
-            except VkException as e:
-                print(e.message, 'In mutual friends')
+    for part in parts(friends):
+        url = self.get_request_url(api_methods.METHOD_URL.value,
+                                   api_methods.FRIENDS_GET_MUTUAL.value,
+                                   fields={
+                                       api_keys.TARGET_UIDS.value: ','.join(map(str, part))
+                                   })
+        try:
+            response = resp(requests.get(url).json())
+            common_friends.extend(response['response'])
+        except VkException as e:
+            print(e.message, 'In mutual friends')
 
-            sleep(delay)
+        sleep(delay)
 
-        return common_friends
+    return common_friends

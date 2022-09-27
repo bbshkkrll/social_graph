@@ -15,7 +15,7 @@ def graph():
     code = request.cookies.get('code')
 
     try:
-        access = app_session. get_access(code)
+        access = app_session.get_access(code)
         usr = User(access['expires_in'], access['user_id'], access['access_token'])
         usr.save_graph()
 
