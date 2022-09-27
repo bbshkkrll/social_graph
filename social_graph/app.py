@@ -17,9 +17,11 @@ def graph():
     try:
         access = app_session.get_access(code)
         usr = User(access['expires_in'], access['user_id'], access['access_token'])
-        usr.save_graph()
+        filename = usr.save_graph()
 
-        return render_template('index.html')
+        response = make_response(render_template('index.html'))
+        response.set_cookie('filename', filename)
+        return response
     except VkException as e:
         return render_template('server_error.html', error_msg=e.message)
 

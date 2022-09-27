@@ -35,3 +35,5 @@ class User:
         else:
             self.graph = Graph(self)
             self.save_graph(self.graph.graph)
+
+        return filename
