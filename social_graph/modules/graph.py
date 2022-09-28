@@ -28,10 +28,10 @@ class Graph:
             nodes.append(node)
             links.extend(friend_links)
 
-            user_node, user_links = self.add_user_to_graph(require_links)
+        user_node, user_links = self.add_user_to_graph(require_links)
 
-            nodes.append(user_node)
-            nodes.extend(user_links)
+        nodes.append(user_node)
+        nodes.extend(user_links)
 
         return {
             'links': links,
