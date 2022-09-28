@@ -31,7 +31,7 @@ class Graph:
         user_node, user_links = self.add_user_to_graph(require_links)
 
         nodes.append(user_node)
-        nodes.extend(user_links)
+        links.extend(user_links)
 
         return {
             'links': links,
