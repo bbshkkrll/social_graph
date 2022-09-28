@@ -12,9 +12,9 @@ class Graph:
 
         for friend in self.user.active_friends:
             node = {
-                'name': f'{friend["first_name"]} {friend["last_name"]}',
                 'id': friend['id'],
-                'group': friend['sex']
+                'group': friend['sex'],
+                'name': f'{friend["first_name"]} {friend["last_name"]}',
             }
 
             friend_links = [{'source': friend['id'],
@@ -29,9 +29,9 @@ class Graph:
             links.extend(friend_links)
 
         nodes.append({
+            'id': self.user.user_id,
+            'group': self.user.sex,
             'name': f'{self.user.first_name} {self.user.last_name}',
-            'if': self.user.user_id,
-            'group': self.user.sex
         })
         links.extend([{'source': self.user.user_id,
                        'target': friend_id,
