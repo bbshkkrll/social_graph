@@ -38,8 +38,8 @@ class Graph:
                        'value': 1} for friend_id in self.user.friends_ids])
 
         return {
+            'nodes': nodes,
             'links': links,
-            'nodes': nodes
         }
 
     # def add_user_to_graph(self):

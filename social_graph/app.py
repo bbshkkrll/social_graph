@@ -20,9 +20,9 @@ def graph():
         filename = usr.save_graph()
         filename_json = '.' + filename
 
-        # response = make_response(render_template('index.html'))
+        response = make_response(render_template('index.html'))
 
-        response = make_response(render_template('code.html'))
+        # response = make_response(render_template('code.html'))
         response.set_cookie('filename_json', filename_json)
 
         return response
