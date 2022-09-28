@@ -25,7 +25,7 @@ def graph():
         with open(filename, 'r', 'utf-8') as f:
             content = f.read()
 
-        response = make_response(render_template('code.html', json=content))
+        response = make_response(render_template('code.html'))
         response.set_cookie('filename_json', filename_json)
 
         return response
