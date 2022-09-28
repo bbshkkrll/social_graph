@@ -17,10 +17,17 @@ def graph():
     try:
         access = app_session.get_access(code)
         usr = User(access['expires_in'], access['user_id'], access['access_token'])
-        filename_json = '.' + usr.save_graph()
+        filename = usr.save_graph()
+        filename_json = '.' + filename
 
-        response = make_response(render_template('index.html'))
+        # response = make_response(render_template('index.html'))
+        content = None
+        with open(filename, 'r', 'utf-8') as f:
+            content = f.read()
+
+        response = make_response(render_template('code.html', json=content))
         response.set_cookie('filename_json', filename_json)
+
         return response
     except VkException as e:
         return render_template('server_error.html', error_msg=e.message)
