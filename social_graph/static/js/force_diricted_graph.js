@@ -20,6 +20,7 @@ let simulation = d3.forceSimulation()
     }));
 
 let filename = getFilename();
+alert(filename)
 
 d3.json(filename.toString(), function (error, graph) {
     if (error) throw error;
@@ -137,7 +138,7 @@ function getFilename() {
     let cookies = document.cookie.split(';');
     let filename = '';
     for (let i = 0; i <= cookies.length; i++) {
-        if (cookies[i].startsWith('filename'))
+        if (cookies[i].startsWith('filename_json'))
             filename = cookies[i].split('=')[1];
         return filename;
     }
