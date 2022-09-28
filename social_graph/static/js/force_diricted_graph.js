@@ -19,10 +19,9 @@ let simulation = d3.forceSimulation()
         return -1;
     }));
 
-let filename = getFilename();
-alert(filename)
+let filename = getCookie('filename_json');
 
-d3.json(filename.toString(), function (error, graph) {
+d3.json(filename, function (error, graph) {
     if (error) throw error;
 
     let link = svg.append("g")
@@ -134,12 +133,13 @@ function neighboring(a, b) {
     return a.index === b.index || linkedByIndex[a.index + "," + b.index];
 }
 
-function getFilename() {
-    let cookies = document.cookie.split(';');
-    let filename = '';
-    for (let i = 0; i <= cookies.length; i++) {
-        if (cookies[i].startsWith('filename_json'))
-            filename = cookies[i].split('=')[1];
-        return filename;
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
     }
+    return null;
 }
