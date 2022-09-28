@@ -21,9 +21,6 @@ def graph():
         filename_json = '.' + filename
 
         # response = make_response(render_template('index.html'))
-        content = None
-        with open(filename, 'r', 'utf-8') as f:
-            content = f.read()
 
         response = make_response(render_template('code.html'))
         response.set_cookie('filename_json', filename_json)
