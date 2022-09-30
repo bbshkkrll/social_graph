@@ -13,15 +13,22 @@ users = {}
 @app.route("/graph")
 def graph():
     code = request.cookies.get('code')
+    usr_id = request.cookies.get('user_id')
+    if usr_id in users.keys():
+        render_template('index.html')
 
     try:
+
         access = app_session.get_access(code)
         usr = User(access['expires_in'], access['user_id'], access['access_token'])
+
         filename = usr.save_graph()
         filename_json = '.' + filename
 
         response = make_response(render_template('index.html'))
         response.set_cookie('filename_json', filename_json)
+        response.set_cookie('usr_id', access['user_id'])
+        users[access['user_id']] = usr
 
         return response
     except VkException as e:
@@ -49,6 +56,5 @@ if __name__ == '__main__':
 # Front:
 # 1. Statistic about friends vk
 # Back:
-# 1. Class for auth user
+# 1. Class for auth user DONE
 # 2. Hold user's token on server
-# 3. Counting token's expired time
