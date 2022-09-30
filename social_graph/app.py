@@ -16,7 +16,7 @@ def graph():
     try:
         usr_id = request.cookies.get('user_id')
         if usr_id in users.keys():
-            render_template('index.html')
+            return render_template('index.html')
     except KeyError as e:
 
         try:
