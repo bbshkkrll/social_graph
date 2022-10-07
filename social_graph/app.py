@@ -25,7 +25,7 @@ def graph():
         response = make_response(render_template('index.html'))
         response.set_cookie('filename_json', filename_json)
         response.set_cookie('usr_id', access['user_id'])
-        users[access['user_id']] = usr
+        # users[access['user_id']] = usr
 
         return response
     except VkException as e:
