@@ -13,28 +13,23 @@ users = {}
 @app.route("/graph")
 def graph():
     code = request.cookies.get('code')
+
     try:
-        usr_id = request.cookies.get('user_id')
-        if usr_id in users.keys():
-            return render_template('index.html')
-    except:
 
-        try:
+        access = app_session.get_access(code)
+        usr = User(access['expires_in'], access['user_id'], access['access_token'])
 
-            access = app_session.get_access(code)
-            usr = User(access['expires_in'], access['user_id'], access['access_token'])
+        filename = usr.save_graph()
+        filename_json = '.' + filename
 
-            filename = usr.save_graph()
-            filename_json = '.' + filename
+        response = make_response(render_template('index.html'))
+        response.set_cookie('filename_json', filename_json)
+        response.set_cookie('usr_id', access['user_id'])
+        users[access['user_id']] = usr
 
-            response = make_response(render_template('index.html'))
-            response.set_cookie('filename_json', filename_json)
-            response.set_cookie('usr_id', access['user_id'])
-            users[access['user_id']] = usr
-
-            return response
-        except VkException as e:
-            return render_template('server_error.html', error_msg=e.message)
+        return response
+    except VkException as e:
+        return render_template('server_error.html', error_msg=e.message)
 
 
 @app.route('/auth', methods=['GET'])
