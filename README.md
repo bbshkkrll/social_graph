@@ -15,5 +15,4 @@
 > - Корректная интеграция базы данных в приложение.
 > - Сохранение информации о пользователе.
 ## Пример
-
-![init graph](social_graph/media/init_sample.gif)
+  ![init graph](social_graph/media/init_sample.gif)
