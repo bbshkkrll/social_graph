@@ -16,4 +16,4 @@
 > - Сохранение информации о пользователе.
 ## Пример
 
-![init graph](https://github.com/bbshkkrll/social_graph/blob/main/social_graph/static/img/init.gif)
+![init graph](social_graph/media/init_sample.gif)
