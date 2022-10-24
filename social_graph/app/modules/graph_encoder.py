@@ -1,6 +1,6 @@
 from json import JSONEncoder
 
-from social_graph.modules.models import User
+from social_graph.app.models import User
 
 
 class GraphEncoder(JSONEncoder):

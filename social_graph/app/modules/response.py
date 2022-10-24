@@ -1,5 +1,5 @@
-from social_graph.modules.enums import VkApiErrors
-from social_graph.modules.vk_exception import VkException
+from social_graph.app.modules.enums import VkApiErrors
+from social_graph.app.modules.vk_exception import VkException
 
 
 class VkApiResponse:

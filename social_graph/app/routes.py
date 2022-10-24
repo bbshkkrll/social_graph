@@ -1,19 +1,8 @@
-import os
+from flask import request, render_template, make_response, redirect, url_for, jsonify
 
-from flask import Flask, render_template, request, url_for, session, make_response, redirect, jsonify
-from modules.vk_session import VkSession
-from social_graph.modules.models import Token
-from social_graph.modules.models import User
-from social_graph.modules.vk_exception import VkException
-
-from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-
-app_session = VkSession()
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-db = SQLAlchemy(app)
+from social_graph.app import app, app_session, db
+from social_graph.app.models import Token, User
+from social_graph.app.modules.vk_exception import VkException
 
 
 @app.route("/graph")
@@ -66,11 +55,3 @@ def send_data():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-# TODO
-# Front:
-# 1. Statistic about friends vk
-# Back:
-# 1. Class for auth user DONE
-# 2. Hold user's token on server
-#   2.1 Хранение экземпляра класса User, Graph, Token в базе данных

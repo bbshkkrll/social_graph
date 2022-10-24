@@ -1,7 +1,7 @@
 import json
 
-from social_graph.modules.graph import Graph
-from social_graph.modules.vk_session import VkSession
+from social_graph.app import VkSession
+from social_graph.app.models import Graph
 
 
 class User:
