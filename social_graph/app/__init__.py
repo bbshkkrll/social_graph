@@ -9,5 +9,5 @@ app = Flask(__name__)
 
 app_session = VkSession()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['HEROKU_POSTGRESQL_MAROON_URL']
 db = SQLAlchemy(app)
