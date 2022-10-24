@@ -1,7 +1,6 @@
 from json import JSONEncoder
 
 
-
 class GraphEncoder(JSONEncoder):
     def default(self, o):
         require_links = set()
@@ -19,23 +18,23 @@ class GraphEncoder(JSONEncoder):
 
             friend_links = [{'source': friend['id'],
                              'target': target_id,
-                             'value': 1} for target_id in o.user.mutual_friends[friend['id']] if
+                             'value': 1} for target_id in o.mutual_friends[friend['id']] if
                             (target_id, friend['id']) not in require_links]
 
-            for friend_id in o.user.mutual_friends[friend['id']]:
+            for friend_id in o.mutual_friends[friend['id']]:
                 require_links.add((friend['id'], friend_id))
 
             nodes.append(node)
             links.extend(friend_links)
 
         nodes.append({
-            'id': o.user.user_id,
-            'group': o.user.sex,
-            'name': f'{o.user.first_name} {o.user.last_name}',
+            'id': o.user_id,
+            'group': o.sex,
+            'name': f'{o.first_name} {o.last_name}',
         })
-        links.extend([{'source': o.user.user_id,
+        links.extend([{'source': o.user_id,
                        'target': friend_id,
-                       'value': 1} for friend_id in o.user.friends_ids])
+                       'value': 1} for friend_id in o.friends_ids])
 
         return {
             'nodes': nodes,
