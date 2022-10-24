@@ -1,8 +1,8 @@
 import json
 
-from social_graph.app.app import db
-from social_graph.app.app import GraphEncoder
-from social_graph.app.app import VkSession
+from social_graph.app import db
+from social_graph.app.modules.graph_encoder import GraphEncoder
+from social_graph.app import VkSession
 
 
 class Token(db.Model):

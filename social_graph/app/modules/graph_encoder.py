@@ -1,10 +1,9 @@
 from json import JSONEncoder
 
-from social_graph.app.models import User
 
 
 class GraphEncoder(JSONEncoder):
-    def default(self, o: User):
+    def default(self, o):
         require_links = set()
         links = []
         nodes = []
