@@ -19,9 +19,7 @@ let simulation = d3.forceSimulation()
         return -1;
     }));
 
-let filename = getCookie('filename_json');
-
-d3.json(filename, function (error, graph) {
+d3.json("https://your_flas_kapp.com/data", function (error, graph) {
     if (error) throw error;
 
     let link = svg.append("g")
