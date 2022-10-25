@@ -25,7 +25,6 @@ def graph():
         response.set_cookie('is_auth', '1')
         db.session.add(token)
         db.session.add(usr)
-        db.session.add(graph)
         db.session.commit()
 
         return response
