@@ -6,6 +6,7 @@ from social_graph.app import VkSession
 
 
 class Token(db.Model):
+    __tablename__ = 'token_table'
     id = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String(100))
     expires_in = db.Column(db.Date)
@@ -17,6 +18,7 @@ class Token(db.Model):
 
 
 class Graph(db.Model):
+    __tablename__ = 'graph_table'
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.JSON)
 
@@ -25,17 +27,18 @@ class Graph(db.Model):
 
 
 class User(db.Model):
+    __tablename__ = 'user_table'
     id = db.Column(db.Integer, primary_key=True)
     vk_user_id = db.Column(db.String(15))
     first_name = db.Column(db.String(30))
     last_name = db.Column(db.String(30))
     sex = db.Column(db.String(5))
 
-    token_id = db.Column(db.Integer, db.ForeignKey('token.id'), nullable=False)
-    token = db.relationship('Token', backref=db.backref('user'), lazy=True)
+    token_id = db.Column(db.Integer, db.ForeignKey('token_table.id'), nullable=False)
+    token = db.relationship('Token', backref=db.backref('User'), lazy=True)
 
-    graph_id = db.Column(db.Integer, db.ForeignKey('graph.id'), nullable=False)
-    graph = db.relationship('Graph', backref=db.backref('user'), lazy=True)
+    graph_id = db.Column(db.Integer, db.ForeignKey('graph_table.id'), nullable=False)
+    graph = db.relationship('Graph', backref=db.backref('User'), lazy=True)
 
     def __init__(self, access_token: Token):
         self.user_id = access_token.id
