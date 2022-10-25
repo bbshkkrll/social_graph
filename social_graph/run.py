@@ -23,8 +23,9 @@ def graph():
         response = make_response(render_template('index.html'))
         response.set_cookie('usr_id', str(usr.user_id))
         response.set_cookie('is_auth', '1')
-        db.session.add(usr)
-        db.session.commit()
+        with app.app_context():
+            db.session.add(usr)
+            db.session.commit()
 
         return response
     except VkException as e:
@@ -47,8 +48,9 @@ def login():
 
 @app.route('/data')
 def send_data():
-    data = User.query.get(vk_usr_id=f'{request.cookies.get("usr_id")}').graph.data
-    return jsonify(data)
+    with app.app_context():
+        data = User.query.get(vk_usr_id=f'{request.cookies.get("usr_id")}').graph.data
+        return jsonify(data)
 
 
 if __name__ == '__main__':
