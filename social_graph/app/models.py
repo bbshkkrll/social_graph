@@ -9,7 +9,7 @@ class Token(db.Model):
     __tablename__ = 'token_table'
     id = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String(100))
-    expires_in = db.Column(db.String(25))
+    expires_in = db.Column(db.Integer)
 
     def __init__(self, user_id, access_token, expires_in):
         self.id = user_id
