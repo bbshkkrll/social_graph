@@ -50,6 +50,8 @@ class User(db.Model):
         self.friends_ids = [friend['id'] for friend in self.active_friends]  # ids of active friends
         self.mutual_friends = self.get_mutual_friends()  # dict id : mutual friends with this user and id
 
+        self.graph = Graph(self)
+
     def get_mutual_friends(self):
         return {item['id']: item['common_friends']
                 for item in self.vk_session.get_mutual_friends(self.friends_ids)}
@@ -64,6 +66,3 @@ class User(db.Model):
     def get_base_info(self):
         info = self.vk_session.get_current_user_base_info()
         return info['first_name'], info['last_name'], info['sex']
-
-
-
