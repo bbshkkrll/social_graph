@@ -24,6 +24,8 @@ def graph():
         response.set_cookie('usr_id', str(usr.user_id))
         response.set_cookie('is_auth', '1')
         with app.app_context():
+            db.session.add(token)
+            db.session.add(graph)
             db.session.add(usr)
             db.session.commit()
 
