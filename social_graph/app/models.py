@@ -35,10 +35,10 @@ class User(db.Model):
     sex = db.Column(db.String(5))
 
     token_id = db.Column(db.Integer, db.ForeignKey('token_table.id'), nullable=False)
-    token = db.relationship('token_table', backref=db.backref('user_table'), lazy=True)
+    token = db.relationship('Token', backref=db.backref('User'), lazy=True)
 
     graph_id = db.Column(db.Integer, db.ForeignKey('graph_table.id'), nullable=False)
-    graph = db.relationship('graph_table', backref=db.backref('user_table'), lazy=True)
+    graph = db.relationship('Graph', backref=db.backref('User'), lazy=True)
 
     def __init__(self, access_token: Token):
         self.user_id = access_token.id
