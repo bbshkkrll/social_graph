@@ -22,7 +22,7 @@ def graph():
 
         response = make_response(render_template('index.html'))
         response.set_cookie('usr_id', str(usr.user_id))
-        response.set_cookie('is_auth', 1)
+        response.set_cookie('is_auth', '1')
         db.session.add(token)
         db.session.add(usr)
         db.session.add(graph)
