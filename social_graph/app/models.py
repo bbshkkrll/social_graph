@@ -1,46 +1,55 @@
 import json
 
-from social_graph.app import db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.types import Integer, JSON, String
 from social_graph.app.modules.graph_encoder import GraphEncoder
 from social_graph.app import VkSession
 
+Base = declarative_base()
 
-class Token(db.Model):
+
+class Token(Base):
     __tablename__ = 'token_table'
-    id = db.Column(db.Integer, primary_key=True)
-    token = db.Column(db.String(100))
-    expires_in = db.Column(db.Integer)
 
-    def __init__(self, user_id, access_token, expires_in):
+    id = Column(Integer, primary_key=True)
+    token = Column(String(100))
+    expires_in = Column(Integer)
+
+    def __init__(self, user_id, access_token, expires_in, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.id = user_id
         self.token = access_token
         self.expires_in = expires_in
 
 
-class Graph(db.Model):
+class Graph(Base):
     __tablename__ = 'graph_table'
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.JSON)
+    id = Column(Integer, primary_key=True)
+    data = Column(JSON)
 
-    def __init__(self, user):
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.data = json.dumps(user, cls=GraphEncoder)
 
 
-class User(db.Model):
+class User(Base):
     __tablename__ = 'user_table'
-    id = db.Column(db.Integer, primary_key=True)
-    vk_user_id = db.Column(db.String(15))
-    first_name = db.Column(db.String(30))
-    last_name = db.Column(db.String(30))
-    sex = db.Column(db.String(5))
+    id = Column(Integer, primary_key=True)
+    vk_user_id = Column(String(15))
+    first_name = Column(String(30))
+    last_name = Column(String(30))
+    sex = Column(String(5))
 
-    token_id = db.Column(db.Integer, db.ForeignKey('token_table.id'), nullable=False)
-    token = db.relationship('Token', backref=db.backref('User'), lazy=True)
+    token_id = Column(Integer, ForeignKey('token_table.id'), nullable=False)
+    token = relationship('Token', backref=backref('User'), lazy=True)
 
-    graph_id = db.Column(db.Integer, db.ForeignKey('graph_table.id'), nullable=False)
-    graph = db.relationship('Graph', backref=db.backref('User'), lazy=True)
+    graph_id = Column(Integer, ForeignKey('graph_table.id'), nullable=False)
+    graph = relationship('Graph', backref=backref('User'), lazy=True)
 
-    def __init__(self, access_token: Token):
+    def __init__(self, access_token: Token, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.user_id = access_token.id
         self.access_token = access_token
         self.vk_session = VkSession(token=self.access_token.token)
