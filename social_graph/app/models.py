@@ -50,8 +50,9 @@ class User(Base):
 
     def __init__(self, access_token: Token, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.access_token = access_token
-        self.vk_session = VkSession(token=self.access_token.token)
+        self.token = access_token
+        self.token_id = self.token.id
+        self.vk_session = VkSession(token=self.token.token)
 
         self.first_name, self.last_name, self.sex, self.user_id = self.get_base_info()
 
