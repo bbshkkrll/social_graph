@@ -14,7 +14,7 @@ class Token(Base):
     __tablename__ = 'token_table'
 
     id = Column(Integer, primary_key=True)
-    token = Column(String(100))
+    token = Column(String(300))
     expires_in = Column(Integer)
 
     def __init__(self, user_id, access_token, expires_in, *args, **kwargs):
