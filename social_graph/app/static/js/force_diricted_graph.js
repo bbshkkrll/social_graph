@@ -19,7 +19,7 @@ let simulation = d3.forceSimulation()
         return -1;
     }));
 
-d3.json("https://your_flas_kapp.com/data", function (error, graph) {
+d3.json("https://vk-social-graph.herokuapp.com/data", function (error, graph) {
     if (error) throw error;
 
     let link = svg.append("g")
