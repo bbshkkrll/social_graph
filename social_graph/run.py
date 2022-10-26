@@ -21,7 +21,7 @@ def graph():
         graph = usr.get_graph()
 
         response = make_response(render_template('index.html'))
-        response.set_cookie('usr_id', str(usr.user_id))
+        response.set_cookie('usr_id', str(usr.vk_user_id))
         response.set_cookie('is_auth', '1')
         with app.app_context():
             db_session.add(token)
