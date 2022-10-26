@@ -50,11 +50,10 @@ class User(Base):
 
     def __init__(self, access_token: Token, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user_id = access_token.id
         self.access_token = access_token
         self.vk_session = VkSession(token=self.access_token.token)
 
-        self.first_name, self.last_name, self.sex = self.get_base_info()
+        self.first_name, self.last_name, self.sex, self.user_id = self.get_base_info()
 
         self.all_friends = self.vk_session.get_friends()  # list of friends (uid, first_name, last_name, sex)
         self.active_friends = list(filter((lambda x: 'deactivated' not in x.keys()), self.all_friends))
@@ -77,4 +76,4 @@ class User(Base):
 
     def get_base_info(self):
         info = self.vk_session.get_current_user_base_info()
-        return info['first_name'], info['last_name'], info['sex']
+        return info['first_name'], info['last_name'], info['sex'], info['id']

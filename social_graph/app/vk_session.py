@@ -44,6 +44,7 @@ class VkSession:
             api_keys.FIELDS.value: ','.join([api_fields.FIRST_NAME.value,
                                              api_fields.LAST_NAME.value,
                                              api_fields.SEX.value,
+                                             api_fields.UID.value
                                              ])
         }, token=True)
 
