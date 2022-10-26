@@ -1,6 +1,6 @@
 from flask import request, render_template, make_response, redirect, url_for, jsonify
 
-from app import app, app_session, db
+from app import app, app_session, db_session
 from app.models import Token, User
 from app.modules.vk_exception import VkException
 
@@ -24,10 +24,10 @@ def graph():
         response.set_cookie('usr_id', str(usr.user_id))
         response.set_cookie('is_auth', '1')
         with app.app_context():
-            db.session.add(token)
-            db.session.add(graph)
-            db.session.add(usr)
-            db.session.commit()
+            db_session.add(token)
+            db_session.add(graph)
+            db_session.add(usr)
+            db_session.commit()
 
         return response
     except VkException as e:
