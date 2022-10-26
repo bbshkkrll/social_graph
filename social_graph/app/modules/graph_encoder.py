@@ -28,11 +28,11 @@ class GraphEncoder(JSONEncoder):
             links.extend(friend_links)
 
         nodes.append({
-            'id': o.user_id,
+            'id': o.vk_user_id,
             'group': o.sex,
             'name': f'{o.first_name} {o.last_name}',
         })
-        links.extend([{'source': o.user_id,
+        links.extend([{'source': o.vk_user_id,
                        'target': friend_id,
                        'value': 1} for friend_id in o.friends_ids])
 
