@@ -52,7 +52,7 @@ def login():
 def send_data():
     with app.app_context():
         vk_user_id = request.cookies.get('usr_id')
-        data = db_session.query(User).filter(User.vk_user_id == vk_user_id).first()
+        data = db_session.query(User).filter(User.vk_user_id == vk_user_id).one().graph.data
         return jsonify(data)
 
 
