@@ -1,7 +1,7 @@
 from flask import request, render_template, make_response, redirect, url_for, jsonify
 
 from app import app, app_session, db_session
-from app.models import Token, User
+from app.models import Token, User, Graph
 from app.modules.vk_exception import VkException
 
 
@@ -52,7 +52,8 @@ def login():
 def send_data():
     with app.app_context():
         vk_user_id = request.cookies.get('usr_id')
-        data = db_session.query(User).filter(User.vk_user_id == vk_user_id).one().graph.data
+        user = db_session.query(User).filter(User.vk_user_id == vk_user_id).one()
+        data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
         return jsonify(data)
 
 
