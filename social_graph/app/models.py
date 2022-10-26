@@ -54,7 +54,7 @@ class User(Base):
         self.token_id = self.token.id
         self.vk_session = VkSession(token=self.token.token)
 
-        self.first_name, self.last_name, self.sex, self.user_id = self.get_base_info()
+        self.first_name, self.last_name, self.sex, self.vk_user_id = self.get_base_info()
 
         self.all_friends = self.vk_session.get_friends()  # list of friends (uid, first_name, last_name, sex)
         self.active_friends = list(filter((lambda x: 'deactivated' not in x.keys()), self.all_friends))

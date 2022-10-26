@@ -51,7 +51,8 @@ def login():
 @app.route('/data')
 def send_data():
     with app.app_context():
-        data = User.query.get(vk_usr_id=f'{request.cookies.get("usr_id")}').graph.data
+        vk_user_id = request.cookies.get('usr_id')
+        data = db_session.query(User).filter(User.vk_user_id == vk_user_id).first()
         return jsonify(data)
 
 
