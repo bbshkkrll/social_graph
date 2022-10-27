@@ -54,7 +54,7 @@ def send_data():
         vk_user_id = request.cookies.get('usr_id')
         user = db_session.query(User).filter(User.vk_user_id == vk_user_id).one()
         data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
-        return data
+        return jsonify(data)
 
 
 if __name__ == '__main__':
