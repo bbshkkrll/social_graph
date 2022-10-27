@@ -1,13 +1,13 @@
 import json
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column, ForeignKey, Text
+from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.types import Integer, JSON, String
+from sqlalchemy.types import Integer, String
 from social_graph.app.modules.graph_encoder import GraphEncoder
 from social_graph.app import VkSession
 from sqlalchemy.types import TypeDecorator
-
 
 Base = declarative_base()
 
@@ -27,7 +27,7 @@ class Token(Base):
 
 
 class JsonEncodedGraph(TypeDecorator):
-    impl = Base.Text
+    impl = Text
 
     def process_bind_param(self, value, dialect):
         if value is None:
@@ -39,7 +39,7 @@ class JsonEncodedGraph(TypeDecorator):
 class Graph(Base):
     __tablename__ = 'graph_table'
     id = Column(Integer, primary_key=True)
-    data = Column(JsonEncodedGraph)
+    data = Column(MutableDict.as_mutable(JsonEncodedGraph))
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
