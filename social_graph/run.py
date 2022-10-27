@@ -52,24 +52,8 @@ def login():
 def send_data():
     with app.app_context():
         vk_user_id = request.cookies.get('usr_id')
-        user = db_session.query(User).filter(User.vk_user_id == '324441199').one()
-        data = {
-            "nodes": [
-                {
-                    "id": 713528,
-                    "group": 2,
-                    "name": "Максим Паначёв"
-                }
-            ],
-            "links": [
-                {
-                    "source": 713528,
-                    "target": 10042554,
-                    "value": 14
-                }
-            ]
-        }
-        # data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
+        user = db_session.query(User).filter(User.vk_user_id == vk_user_id).one()
+        data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
         return jsonify(data)
 
 
