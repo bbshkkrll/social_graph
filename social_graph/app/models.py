@@ -24,14 +24,24 @@ class Token(Base):
         self.expires_in = expires_in
 
 
+class JsonEncodedGraph(Base.TypeDecorator):
+    impl = Base.Text
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return '{}'
+        else:
+            return json.dumps(value, cls=GraphEncoder)
+
+
 class Graph(Base):
     __tablename__ = 'graph_table'
     id = Column(Integer, primary_key=True)
-    data = Column(JSON)
+    data = Column(JsonEncodedGraph)
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data = json.dumps(user, cls=GraphEncoder)
+        self.data = user.graph
 
 
 class User(Base):
