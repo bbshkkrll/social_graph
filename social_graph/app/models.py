@@ -6,6 +6,8 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.types import Integer, JSON, String
 from social_graph.app.modules.graph_encoder import GraphEncoder
 from social_graph.app import VkSession
+from sqlalchemy.types import TypeDecorator
+
 
 Base = declarative_base()
 
@@ -24,7 +26,7 @@ class Token(Base):
         self.expires_in = expires_in
 
 
-class JsonEncodedGraph(Base.TypeDecorator):
+class JsonEncodedGraph(TypeDecorator):
     impl = Base.Text
 
     def process_bind_param(self, value, dialect):
