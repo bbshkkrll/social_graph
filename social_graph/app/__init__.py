@@ -1,6 +1,6 @@
-import os
+import json
+from functools import partial
 
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import Flask
@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fonhqoavpqasjt:226cfdbe542
 
 app.config['JSON_AS_ASCII'] = False
 
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], json_serializer=partial(json.dumps, ensure_ascii=False))
+
 Session = sessionmaker(bind=engine)
 db_session = Session()
