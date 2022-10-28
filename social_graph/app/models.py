@@ -1,7 +1,7 @@
 import json
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, ForeignKey, Text
+from sqlalchemy import Column, ForeignKey, Text, JSON
 from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.types import Integer, String
@@ -26,24 +26,14 @@ class Token(Base):
         self.expires_in = expires_in
 
 
-class JsonEncodedGraph(TypeDecorator):
-    impl = Text
-
-    def process_bind_param(self, value, dialect):
-        if value is None:
-            return '{}'
-        else:
-            return json.dumps(value, cls=GraphEncoder)
-
-
 class Graph(Base):
     __tablename__ = 'graph_table'
     id = Column(Integer, primary_key=True)
-    data = Column(MutableDict.as_mutable(JsonEncodedGraph))
+    data = Column(JSON)
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data = user.graph
+        self.data = json.dumps(user.graph, cls=GraphEncoder)
 
 
 class User(Base):
