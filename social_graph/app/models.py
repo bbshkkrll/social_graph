@@ -29,7 +29,7 @@ class Token(Base):
 class Graph(Base):
     __tablename__ = 'graph_table'
     id = Column(Integer, primary_key=True)
-    data = Column(Text)
+    data = Column(JSON)
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
