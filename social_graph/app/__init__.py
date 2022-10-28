@@ -17,7 +17,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fonhqoavpqasjt:226cfdbe542
 
 app.config['JSON_AS_ASCII'] = False
 
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], json_serializer=partial(json.dumps, ensure_ascii=False))
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], json_serializer=partial(json.dumps, ensure_ascii=False),
+                       client_encoding='utf8')
 
 Session = sessionmaker(bind=engine)
 db_session = Session()

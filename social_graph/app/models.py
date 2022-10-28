@@ -33,7 +33,7 @@ class Graph(Base):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data = json.dumps(user, cls=GraphEncoder)
+        self.data = json.dumps(user, cls=GraphEncoder, ensure_ascii=False)
 
 
 class User(Base):
