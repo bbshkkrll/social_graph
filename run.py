@@ -22,7 +22,7 @@ def graph():
         try:
             old_user = db_session.query(User).filter(User.vk_user_id == usr.vk_user_id).one()
             old_graph = db_session.query(Graph).filter(Graph.id == usr.graph_id).one()
-            old_token = db_session.query(Token).filter(Token.id == usr.token_id)
+            old_token = db_session.query(Token).filter(Token.id == usr.token_id).one()
 
             with app.app_context():
                 db_session.delete(old_user)
@@ -63,7 +63,7 @@ def login():
 @app.route('/data')
 def send_data():
     if 'vk_user_id' not in session:
-        return make_response(redirect(url_for('')))
+        return make_response(redirect(url_for('login')))
 
     vk_user_id = str(session['vk_user_id'])
     with app.app_context():
@@ -72,7 +72,7 @@ def send_data():
             data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
             return jsonify(data)
         except NoResultFound as e:
-            return make_response(redirect(url_for('')))
+            return make_response(redirect(url_for('login')))
 
 
 if __name__ == '__main__':
