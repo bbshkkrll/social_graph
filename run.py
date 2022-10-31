@@ -3,7 +3,6 @@ from flask import request, render_template, make_response, redirect, url_for, js
 from app import app, app_session, db_session
 from app.models import Token, User, Graph
 from app.modules.vk_exception import VkException
-
 from sqlalchemy.exc import NoResultFound
 
 
@@ -20,7 +19,7 @@ def graph():
         session['vk_user_id'] = str(usr.vk_user_id)
 
         try:
-            old_user = db_session.query(User).filter(User.vk_user_id == usr.vk_user_id).one()
+            old_user = db_session.query(User).filter(User.vk_user_id == str(usr.vk_user_id)).one()
             old_graph = db_session.query(Graph).filter(Graph.id == usr.graph_id).one()
             old_token = db_session.query(Token).filter(Token.id == usr.token_id).one()
 
