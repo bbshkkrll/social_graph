@@ -20,7 +20,21 @@ def graph():
 
         try:
             db_session.query(Graph).filter(Graph.id == usr.graph_id).delete()
+
+            with app.app_context():
+                db_session.flush()
+        except NoResultFound:
+            pass
+
+        try:
             db_session.query(Token).filter(Token.id == usr.token_id).delete()
+
+            with app.app_context():
+                db_session.flush()
+        except NoResultFound:
+            pass
+
+        try:
             db_session.query(User).filter(User.vk_user_id == str(usr.vk_user_id)).delete()
 
             with app.app_context():
