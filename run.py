@@ -63,7 +63,7 @@ def login():
 @app.route('/data')
 def send_data():
     if 'vk_user_id' not in session:
-        return make_response(redirect(url_for('/')))
+        return make_response(redirect(url_for('')))
 
     vk_user_id = str(session['vk_user_id'])
     with app.app_context():
@@ -72,7 +72,7 @@ def send_data():
             data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
             return jsonify(data)
         except NoResultFound as e:
-            return make_response(redirect(url_for('/')))
+            return make_response(redirect(url_for('')))
 
 
 if __name__ == '__main__':
