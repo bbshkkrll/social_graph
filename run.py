@@ -24,9 +24,10 @@ def graph():
             old_token = db_session.query(Token).filter(Token.id == usr.token_id).one()
 
             with app.app_context():
-                db_session.delete(old_user)
                 db_session.delete(old_graph)
                 db_session.delete(old_token)
+                db_session.delete(old_user)
+
                 db_session.commit()
         except NoResultFound:
             pass

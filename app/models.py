@@ -32,6 +32,7 @@ class Graph(Base):
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.data = json.dumps(user, cls=GraphEncoder, ensure_ascii=False)
+        self.id = str(user.vk_user_id)
 
 
 class User(Base):
