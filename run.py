@@ -20,9 +20,9 @@ def graph():
         session['vk_user_id'] = usr.vk_user_id
 
         try:
-            old_user = db_session.query(User).filter(User.vk_user_id == usr.vk_user_id).one()
-            old_graph = db_session.query(Graph).filter(Graph.id == old_user.graph_id).one()
-            old_token = db_session.query(Token).filter(Token.id == old_user.token_id)
+            old_user = db_session.query(User).filter(User.vk_user_id == str(usr.vk_user_id)).one()
+            old_graph = db_session.query(Graph).filter(Graph.id == str(old_user.graph_id)).one()
+            old_token = db_session.query(Token).filter(Token.id == str(old_user.token_id))
 
             with app.app_context():
                 db_session.delete(old_user)
