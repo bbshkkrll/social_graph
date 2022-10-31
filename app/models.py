@@ -13,20 +13,20 @@ Base = declarative_base()
 class Token(Base):
     __tablename__ = 'token_table'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(30), primary_key=True)
     token = Column(String(300))
     expires_in = Column(Integer)
 
     def __init__(self, user_id, access_token, expires_in, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.id = user_id
+        self.id = str(user_id)
         self.token = access_token
         self.expires_in = expires_in
 
 
 class Graph(Base):
     __tablename__ = 'graph_table'
-    id = Column(Integer, primary_key=True)
+    id = Column(String(30), primary_key=True)
     data = Column(JSON)
 
     def __init__(self, user, *args, **kwargs):
@@ -42,10 +42,10 @@ class User(Base):
     last_name = Column(String(30))
     sex = Column(String(5))
 
-    token_id = Column(Integer, ForeignKey('token_table.id'), nullable=False)
+    token_id = Column(String(30), ForeignKey('token_table.id'), nullable=False)
     token = relationship('Token', backref=backref('User'), lazy=True)
 
-    graph_id = Column(Integer, ForeignKey('graph_table.id'), nullable=False)
+    graph_id = Column(String(30), ForeignKey('graph_table.id'), nullable=False)
     graph = relationship('Graph', backref=backref('User'), lazy=True)
 
     def __init__(self, access_token: Token, *args, **kwargs):
