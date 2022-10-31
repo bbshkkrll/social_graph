@@ -21,8 +21,8 @@ def graph():
 
         try:
             old_user = db_session.query(User).filter(User.vk_user_id == usr.vk_user_id).one()
-            old_graph = db_session.query(Graph).filter(Graph.id == old_user.graph_id).one()
-            old_token = db_session.query(Token).filter(Token.id == old_user.token_id)
+            old_graph = db_session.query(Graph).filter(Graph.id == usr.graph_id).one()
+            old_token = db_session.query(Token).filter(Token.id == usr.token_id)
 
             with app.app_context():
                 db_session.delete(old_user)
