@@ -13,9 +13,11 @@ def graph():
         return render_template('index.html')
     try:
         code = session['code']
+
         access = app_session.get_access(code)
         token = Token(access['user_id'], access['access_token'], access['expires_in'])
         usr = User(token)
+        session['vk_user_id'] = str(usr.vk_user_id)
 
         try:
             old_user = db_session.query(User).filter(User.vk_user_id == usr.vk_user_id).one()
@@ -32,7 +34,7 @@ def graph():
 
         graph = usr.get_graph()
         response = make_response(render_template('index.html'))
-        session['vk_user_id'] = str(usr.vk_user_id)
+
         with app.app_context():
             db_session.add(token)
             db_session.add(graph)
@@ -70,7 +72,7 @@ def send_data():
             data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
             return jsonify(data)
         except NoResultFound as e:
-            return make_response(render_template(url_for('/')))
+            return make_response(redirect(url_for('/')))
 
 
 if __name__ == '__main__':
