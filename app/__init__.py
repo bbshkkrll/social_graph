@@ -22,6 +22,6 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], json_serializer=partial(json.dumps, ensure_ascii=False),
                        client_encoding='utf8')
 
-Base.metadata.create_all(engine, checkfirst=False)
+Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 db_session = Session()
