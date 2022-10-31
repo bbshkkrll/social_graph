@@ -1,13 +1,11 @@
 import json
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, ForeignKey, Text, JSON
-from sqlalchemy.ext.mutable import MutableDict
+from sqlalchemy import Column, ForeignKey, JSON
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.types import Integer, String
-from social_graph.app.modules.graph_encoder import GraphEncoder
-from social_graph.app import VkSession
-from sqlalchemy.types import TypeDecorator
+from app.modules.graph_encoder import GraphEncoder
+from app import VkSession
 
 Base = declarative_base()
 

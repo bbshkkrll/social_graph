@@ -3,12 +3,12 @@ import requests
 
 from time import sleep
 
-from social_graph.app.modules.partition import get_partition as parts
-from social_graph.app.modules.enums import VkApiMethods as api_methods
-from social_graph.app.modules.enums import VkApiKeys as api_keys
-from social_graph.app.modules.enums import VkApiFields as api_fields
-from social_graph.app.modules.response import VkApiResponse as resp
-from social_graph.app.modules.vk_exception import VkException
+from app.modules.partition import get_partition as parts
+from app.modules.enums import VkApiMethods as api_methods
+from app.modules.enums import VkApiKeys as api_keys
+from app.modules.enums import VkApiFields as api_fields
+from app.modules.response import VkApiResponse as resp
+from app.modules.vk_exception import VkException
 
 
 class VkSession:

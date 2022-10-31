@@ -1,20 +1,20 @@
 import json
+import os
 from functools import partial
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import Flask
 
-from social_graph.app.vk_session import VkSession
-from social_graph.app.models import Base
+from app.modules.vk_session import VkSession
+from app.models import Base
 
 app = Flask(__name__)
 
 app_session = VkSession()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fonhqoavpqasjt:226cfdbe5427c0d6d5e346ddbda2f2f49b785d3ff8' \
-                                        '0b95d997a0684daa8cbeb7@ec2-44-199-9-102.compu' \
-                                        'te-1.amazonaws.com:5432/dn0gdbcvibf1t'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'].replace('postgres', 'postgresql')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 app.config['JSON_AS_ASCII'] = False
 

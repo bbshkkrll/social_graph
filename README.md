@@ -16,5 +16,5 @@
 > - Сохранение информации о пользователе.
 ## Пример
 <p align="center">
-  <img src="social_graph/media/init_sample.gif" />
+  <img src="media/init_sample.gif" />
 </p>

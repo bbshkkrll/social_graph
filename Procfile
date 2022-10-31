@@ -1,1 +1,1 @@
-web: gunicorn --chdir social_graph run:app
+web: gunicorn run:app
