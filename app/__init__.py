@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'].replace('post
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 app.config['JSON_AS_ASCII'] = False
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], json_serializer=partial(json.dumps, ensure_ascii=False),
                        client_encoding='utf8')
