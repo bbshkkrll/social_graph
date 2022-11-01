@@ -20,7 +20,7 @@ def graph():
 
         try:
             with app.app_context():
-                db_session.query(Token).filter(Token.id == session['vk_usr_id']).delete()
+                db_session.query(Token).filter(Token.id == session['vk_user_id']).delete()
                 db_session.commit()
         except NoResultFound:
             pass
@@ -60,6 +60,7 @@ def send_data():
     with app.app_context():
         try:
             data = db_session.query(User).filter(User.vk_user_id == vk_user_id).one().graph
+
             return jsonify(data)
         except NoResultFound as e:
             return make_response(redirect(url_for('login')))
