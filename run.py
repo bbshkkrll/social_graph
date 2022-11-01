@@ -1,3 +1,5 @@
+import json
+
 from flask import request, render_template, make_response, redirect, url_for, jsonify, session
 
 from app import app, app_session, db_session
@@ -60,8 +62,7 @@ def send_data():
     with app.app_context():
         try:
             data = db_session.query(User).filter(User.vk_user_id == vk_user_id).one().graph
-
-            return jsonify(data)
+            return jsonify(json.loads(data))
         except NoResultFound as e:
             return make_response(redirect(url_for('login')))
 
