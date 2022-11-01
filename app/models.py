@@ -33,7 +33,7 @@ class User(Base):
     sex = Column(String(5))
     graph = Column(JSON)
 
-    token_id = Column(String(30), ForeignKey('token_table.id'), ondelete='CASCADE', nullable=False)
+    token_id = Column(String(30), ForeignKey('token_table.id', ondelete='CASCADE'), nullable=False)
     token = relationship('Token', backref=backref('User'), lazy=True)
 
     def __init__(self, access_token: Token, *args, **kwargs):
