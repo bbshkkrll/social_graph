@@ -24,17 +24,6 @@ class Token(Base):
         self.expires_in = expires_in
 
 
-class Graph(Base):
-    __tablename__ = 'graph_table'
-    id = Column(String(30), primary_key=True)
-    data = Column(JSON)
-
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.data = json.dumps(user, cls=GraphEncoder, ensure_ascii=False)
-        self.id = str(user.vk_user_id)
-
-
 class User(Base):
     __tablename__ = 'user_table'
     id = Column(Integer, primary_key=True)
@@ -42,12 +31,10 @@ class User(Base):
     first_name = Column(String(30))
     last_name = Column(String(30))
     sex = Column(String(5))
+    graph = Column(JSON)
 
-    token_id = Column(String(30), ForeignKey('token_table.id'), nullable=False)
+    token_id = Column(String(30), ForeignKey('token_table.id'), ondelete='CASCADE', nullable=False)
     token = relationship('Token', backref=backref('User'), lazy=True)
-
-    graph_id = Column(String(30), ForeignKey('graph_table.id'), nullable=False)
-    graph = relationship('Graph', backref=backref('User'), lazy=True)
 
     def __init__(self, access_token: Token, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -63,7 +50,7 @@ class User(Base):
         self.friends_ids = [friend['id'] for friend in self.active_friends]  # ids of active friends
         self.mutual_friends = self.get_mutual_friends()  # dict id : mutual friends with this user and id
 
-        self.graph = Graph(self)
+        self.graph = json.dumps(self, cls=GraphEncoder, ensure_ascii=False)
 
     def get_mutual_friends(self):
         return {item['id']: item['common_friends']

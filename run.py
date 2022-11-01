@@ -1,7 +1,7 @@
 from flask import request, render_template, make_response, redirect, url_for, jsonify, session
 
 from app import app, app_session, db_session
-from app.models import Token, User, Graph
+from app.models import Token, User
 from app.modules.vk_exception import VkException
 from sqlalchemy.exc import NoResultFound
 
@@ -19,35 +19,16 @@ def graph():
         session['vk_user_id'] = str(usr.vk_user_id)
 
         try:
-            db_session.query(Graph).filter(Graph.id == usr.graph_id).delete()
-
             with app.app_context():
-                db_session.flush()
+                db_session.query(Token).filter(Token.id == session['vk_usr_id']).delete()
+                db_session.commit()
         except NoResultFound:
             pass
 
-        try:
-            db_session.query(Token).filter(Token.id == usr.token_id).delete()
-
-            with app.app_context():
-                db_session.flush()
-        except NoResultFound:
-            pass
-
-        try:
-            db_session.query(User).filter(User.vk_user_id == str(usr.vk_user_id)).delete()
-
-            with app.app_context():
-                db_session.flush()
-        except NoResultFound:
-            pass
-
-        graph = usr.get_graph()
         response = make_response(render_template('index.html'))
 
         with app.app_context():
             db_session.add(token)
-            db_session.add(graph)
             db_session.add(usr)
             db_session.commit()
 
@@ -78,8 +59,7 @@ def send_data():
     vk_user_id = str(session['vk_user_id'])
     with app.app_context():
         try:
-            user = db_session.query(User).filter(User.vk_user_id == vk_user_id).one()
-            data = db_session.query(Graph).filter(Graph.id == user.graph_id).one().data
+            data = db_session.query(User).filter(User.vk_user_id == vk_user_id).one().graph
             return jsonify(data)
         except NoResultFound as e:
             return make_response(redirect(url_for('login')))
@@ -87,3 +67,6 @@ def send_data():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# TODO
+# Настроить каскадное удаление объектов
