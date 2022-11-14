@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Авторизация</title>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
-<div class="container4">
-    <a href="https://oauth.vk.com/authorize?client_id=51395060&display=page&redirect_uri=https://vk-social-graph.herokuapp.com/auth&scope=friends,offline&response_type=code&v=5.131">Войти</a>
+<div class="container-login">
+    <div class="wrap-login">
+        <div class="container-login-btn">
+            <button class="login-btn">Enter with VK</button>
+        </div>
+    </div>
 </div>
-
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </body>
 </html>

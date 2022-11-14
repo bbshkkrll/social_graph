@@ -11,7 +11,7 @@
 #outer {
     background-color: #eee;
     padding-bottom: 0;
-    border: 2px solid #b57281;
+    border: 5px solid #b57281;
     height: 100%;
     width: 98%;
     margin: auto;
@@ -29,3 +29,4 @@ svg.graph {
     width: 100%;
     height: 100%;
 }
+

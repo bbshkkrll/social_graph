@@ -2,6 +2,8 @@ let divOuter = document.getElementById('outer');
 let svg = d3.select("svg.graph"), width = divOuter.clientWidth, height = divOuter.clientHeight;
 
 let color = d3.scaleOrdinal(d3.schemeCategory20);
+let visible = false;
+
 
 let simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function (d) {
@@ -18,7 +20,6 @@ let simulation = d3.forceSimulation()
     .force('x', d3.forceX().x(function () {
         return -1;
     }));
-
 d3.json("https://vk-social-graph.herokuapp.com/data", function (error, graph) {
     if (error) throw error;
 
@@ -39,13 +40,13 @@ d3.json("https://vk-social-graph.herokuapp.com/data", function (error, graph) {
                 return '#8ecae6';
             return '#cf91b5';
         })
-        .on("click", click)
-        .on('dblclick', r_click)
+        .on("click", function (d){
+            click(d);
+        })
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended));
-
 
     node.append("title")
         .text(function (d) {
@@ -106,27 +107,37 @@ function dragended(d) {
 
 }
 
+
 function click(d) {
 
-    d3.selectAll("line").transition().duration(500)
-        .style("opacity", function (o) {
-            return o.source === d || o.target === d ? 1 : 0;
-        });
-    d3.selectAll("circle").transition().duration(500)
-        .style("opacity", function (o) {
-            return neighboring(d, o) ? 1 : 0;
-        });
-}
-
-
-function r_click() {
-    d3.selectAll("line").transition().duration(500)
-        .style("opacity", 1);
-    d3.selectAll("circle").transition().duration(500)
-        .style("opacity", 1);
+    if (!visible) {
+        visible = !visible;
+        d3.selectAll("line").transition().duration(500)
+            .style("opacity", function (o) {
+                return o.source === d || o.target === d ? 1 : 0;
+            });
+        d3.selectAll("circle").transition().duration(500)
+            .style("opacity", function (o) {
+                return neighboring(d, o) ? 1 : 0;
+            });
+    }
+    else {
+        visible = !visible;
+        d3.selectAll("line").transition().duration(500)
+            .style("opacity", 1);
+        d3.selectAll("circle").transition().duration(500)
+            .style("opacity", 1);
+    }
 }
 
 
 function neighboring(a, b) {
     return a.index === b.index || linkedByIndex[a.index + "," + b.index];
 }
+
+function resize() {
+    let outer_div = document.getElementById('outer');
+    simulation.force('center', d3.forceCenter(outer_div.clientWidth / 2, outer_div.clientHeight / 2));
+}
+
+window.addEventListener('resize', resize);
