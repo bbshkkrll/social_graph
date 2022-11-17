@@ -1,25 +1,26 @@
 .links line {
-    stroke: darkgray;
-    stroke-opacity: 2;
+    stroke: #999;
+    stroke-opacity: 0.5;
 }
 
 .nodes circle {
-
+    stroke: #fff;
+    stroke-width: 1px;
 }
 
-.box {
-    background-color: black;
+#outer {
+    background-color: #eee;
     padding-bottom: 0;
+    border: 5px solid #b57281;
     height: 100%;
     width: 98%;
     margin: auto;
+    border-radius: 10px;
 }
 
 html, body {
     height: 99%;
     padding: 0;
-
-    background-color: gray;
 }
 
 
