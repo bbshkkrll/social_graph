@@ -1,6 +1,7 @@
-let box = document.getElementsByClassName('box')[0];
-let svg = d3.select("svg.graph"), width = box.clientWidth, height = box.clientHeight;
+let divOuter = document.getElementById('outer');
+let svg = d3.select("svg.graph"), width = divOuter.clientWidth, height = divOuter.clientHeight;
 
+let color = d3.scaleOrdinal(d3.schemeCategory20);
 let visible = false;
 
 
@@ -33,13 +34,13 @@ d3.json("https://vk-social-graph.herokuapp.com/data", function (error, graph) {
         .selectAll("circle")
         .data(graph.nodes)
         .enter().append("circle")
-        .attr("r", 11)
+        .attr("r", 8)
         .attr("fill", function (d) {
             if (d.group > 1)
-                return '#005EFF';
-            return '#ff00cd';
+                return '#8ecae6';
+            return '#cf91b5';
         })
-        .on("click", function (d) {
+        .on("click", function (d){
             click(d);
         })
         .call(d3.drag()
@@ -119,7 +120,8 @@ function click(d) {
             .style("opacity", function (o) {
                 return neighboring(d, o) ? 1 : 0;
             });
-    } else {
+    }
+    else {
         visible = !visible;
         d3.selectAll("line").transition().duration(500)
             .style("opacity", 1);
@@ -134,8 +136,8 @@ function neighboring(a, b) {
 }
 
 function resize() {
-    let box = document.getElementsByClassName('box')[0];
-    simulation.force('center', d3.forceCenter(box.clientWidth / 2, box.clientHeight / 2));
+    let outer_div = document.getElementById('outer');
+    simulation.force('center', d3.forceCenter(outer_div.clientWidth / 2, outer_div.clientHeight / 2));
 }
 
 window.addEventListener('resize', resize);

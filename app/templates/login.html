@@ -2,15 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Авторизация</title>
+    <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
-<div class="container-login">
-    <div class="wrap-login">
-        <div class="container-login-btn">
-            <button class="login-btn">Enter with VK</button>
-        </div>
+<div class="container-box">
+    <div class="box">
+        <p class="title-p">
+            SOCIAL<br/>GRAPH
+        </p>
+    </div>
+    <div class="box">
+        <p class="text-p">
+            ВКонтакте— социальная сеть, где есть дружеские связи, настройки приватности и даже черные списки. Многое
+            зависит от того, кто просматривает страницу: кто-то увидит на ней всю ту же информацию, что и владелец, а
+            кто-то — лишь общедоступные данные.
+            <br/>
+            <br/>
+            В API этот принцип сохраняется. Если вы скрыли список своих групп от не-друзей, то и через API ваши
+            не-друзья не должны его увидеть. Поэтому почти все методы требуют авторизации пользователя перед началом
+            работы. Проще говоря, сервер должен знать, кто к нему обращается за информацией, чтобы предоставить ее в том
+            же виде, что и в основной версии сайта.
+            <br/>
+            <br/>
+            Чтобы продолжить нажмите кнопку "Авторизоваться" - это <u>безопасно!</u>
+        </p>
+    </div>
+    <div class="container-login-btn">
+        <button class="login-btn">Авторизоваться</button>
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/login.js') }}"></script>
