@@ -15,7 +15,6 @@
 
 .container-box div {
     margin-left: 8.3vw;
-    border: 2px solid red ;
 }
 
 .container-box:hover .text-p {
@@ -31,7 +30,7 @@
     display: inline-block;
     width: 35vw;
     height: 68vh;
-    /*max-height: 500px;*/
+    max-height: 500px;
     text-align: left;
     margin-top: 16vh;
     vertical-align: bottom;
@@ -59,8 +58,9 @@
     font-size: 1.3vw;
     max-font-size: 18px;
     text-align: left;
-    padding-top: 80px;
+    padding-top: 1vw;
     transition-duration: 1s;
+    margin-top: 0;
 }
 
 .container-login-btn {
