@@ -36,8 +36,8 @@ d3.json("https://vk-social-graph.herokuapp.com/data", function (error, graph) {
         .attr("r", 11)
         .attr("fill", function (d) {
             if (d.group > 1)
-                return '#005EFF';
-            return '#ff00cd';
+                return '#0062AA';
+            return '#B40081';
         })
         .on("click", function (d) {
             click(d);
