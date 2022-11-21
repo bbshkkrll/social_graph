@@ -7,19 +7,17 @@
 
 }
 
+html, body {
+    height: 99%;
+    padding: 0;
+}
+
 .box {
     background-color: black;
     padding-bottom: 0;
     height: 100%;
     width: 98%;
     margin: auto;
-}
-
-html, body {
-    height: 99%;
-    padding: 0;
-
-    background-color: gray;
 }
 
 

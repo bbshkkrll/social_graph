@@ -60,9 +60,6 @@ class User(Base):
         if self.active_friends is not None:
             return {friend['id']: friend for friend in self.active_friends}
 
-    def get_graph(self):
-        return Graph(self)
-
     def get_base_info(self):
         info = self.vk_session.get_current_user_base_info()
         return info['first_name'], info['last_name'], info['sex'], info['id']

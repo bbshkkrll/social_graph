@@ -3,6 +3,8 @@ let svg = d3.select("svg.graph"), width = box.clientWidth, height = box.clientHe
 
 let visible = false;
 
+const color_male = '#0062AA';
+const color_female = '#B40081';
 
 let simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function (d) {
@@ -36,8 +38,8 @@ d3.json("https://vk-social-graph.herokuapp.com/data", function (error, graph) {
         .attr("r", 11)
         .attr("fill", function (d) {
             if (d.group > 1)
-                return '#0062AA';
-            return '#B40081';
+                return color_male;
+            return color_female;
         })
         .on("click", function (d) {
             click(d);
