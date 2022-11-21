@@ -10,6 +10,7 @@
 html, body {
     height: 99%;
     padding: 0;
+    background-color: black;
 }
 
 .box {
